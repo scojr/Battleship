@@ -88,7 +88,8 @@ export class Gameboard {
 }
 
 export class Player {
-  constructor() {
-
+  constructor(isComputer = false) {
+    this.isComputer = isComputer;
+    this.gameboard = new Gameboard;
   }
 }
