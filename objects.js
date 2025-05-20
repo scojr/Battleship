@@ -13,9 +13,11 @@ export class Ship {
 }
 
 class Cell {
-  constructor(value = null) {
-    this.value = value;
-  }
+  #hasShip = false;
+  #hasMissle = false;
+  placeShip() { this.#hasShip = true };
+  placeMissle() { this.#hasMissle = true };
+  has() { return { ship: this.#hasShip, missle: this.#hasMissle } }
 }
 
 export class Gameboard {
@@ -27,16 +29,28 @@ export class Gameboard {
       for (let i = 0; i < 10; i++) {
         const row = [];
         for (let i = 0; i < 10; i++) {
-          row.push(new Cell(null));
+          row.push(new Cell());
         }
         grid.push(row);
       }
       return grid;
     }
   }
-  place() {
 
+  place(x, y, length, isHorizontal = true) {
+    const ship = new Ship(length);
+    if (isHorizontal && x + length > 10 || !isHorizontal && y + length > 10) return false;
+    if (isHorizontal) {
+      for (let i = 0; i < length; i++) {
+        this.getCell((x + i), y).placeShip();
+      }
+    } else {
+      for (let i = 0; i < length; i++) {
+        this.getCell(x, (y + i)).placeShip();
+      }
+    }
   }
+
   receiveAttack() {
 
   }
