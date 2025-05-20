@@ -35,17 +35,17 @@ describe('Gameboard', () => {
     expect(gameboard.getCell(9, 9).has()).toEqual({ ship: false, missle: false });
   });
 
-  test('isShip returns true when ship placed', () => {
+  test('cell.has() returns ship object if present', () => {
     gameboard.place(3, 3, 5);
-    expect(gameboard.getCell(3, 3).has()).toEqual({ ship: true, missle: false });
-    expect(gameboard.getCell(7, 3).has()).toEqual({ ship: true, missle: false });
+    expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
+    expect(gameboard.getCell(7, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(8, 3).has()).toEqual({ ship: false, missle: false });
   });
 
-  test('isShip returns true when ship placed vertically', () => {
+  test('isShip returns true if ship placed vertical', () => {
     gameboard.place(3, 3, 5, false);
-    expect(gameboard.getCell(3, 3).has()).toEqual({ ship: true, missle: false });
-    expect(gameboard.getCell(3, 7).has()).toEqual({ ship: true, missle: false });
+    expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
+    expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missle: false });
   });
 
@@ -54,5 +54,27 @@ describe('Gameboard', () => {
     expect(gameboard.getCell(7, 2).has()).toEqual({ ship: false, missle: false });
     expect(gameboard.place(2, 7, 5, false)).toBe(false);
     expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missle: false });
+  });
+
+  test('recieveAttack() attack ship if present and record misses', () => {
+    gameboard.place(3, 3, 5);
+    gameboard.receiveAttack(3, 3);
+    expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 4, length: 5 });
+    gameboard.receiveAttack(3, 3);
+    expect(gameboard.getCell(7, 3).has().ship).toEqual({ health: 3, length: 5 });
+    expect(gameboard.receiveAttack(2, 3)).toBe(false);
+    expect(gameboard.getMissedAttacks()).toEqual([[2, 3]]);
+  });
+
+  test('areShipsSunk() returns true if all ships have been sunk', () => {
+    gameboard.place(3, 3, 5);
+    gameboard.receiveAttack(3, 3);
+    gameboard.receiveAttack(3, 3);
+    gameboard.receiveAttack(3, 3);
+    expect(gameboard.areShipsSunk()).toBe(false);
+    gameboard.receiveAttack(3, 3);
+    gameboard.receiveAttack(3, 3);
+    expect(gameboard.getShips()[0]).toEqual({ health: 0, length: 5 });
+    expect(gameboard.areShipsSunk()).toBe(true);
   });
 })
