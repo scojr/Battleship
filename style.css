@@ -7,16 +7,21 @@
 }
 
 :root {
-  --primary-color: orange;
+  --battleship-gray: #5B6770;
+  --navy-blue: #1A2A6C;
+  --bright-red: #D72631;
+  --light-blue: #7FB3D5;
+  --dark-slate-gray: #2F4F4F;
 }
 
 html {
   font-size: 20px;
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+  font-family: 'Nimbus Mono PS', 'Courier New', monospace;
+  font-weight: normal;
 }
 
-ol[role="list"],
-ul[role="list"] {
+ol[role='list'],
+ul[role='list'] {
   list-style: none;
   padding-inline: 0;
 }
@@ -41,5 +46,38 @@ svg {
 }
 
 body {
+  margin: 0;
+  height: 100vh;
   line-height: 1.5;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    'title gameboard display'
+    'score gameboard display'
+    'score gameboard .'
+    '. gameboard .';
+}
+
+.gameboard-container {
+  grid-area: gameboard;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  width: 100%;
+}
+
+.grid {
+  aspect-ratio: 1/1;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  border: 1px solid #000000;
+  width: 25em;
+
+  .cell {
+    border: 1px solid #808080;
+  }
 }
