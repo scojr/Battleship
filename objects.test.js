@@ -37,11 +37,16 @@ describe('Gameboard', () => {
     expect(gameboard.getCell(9, 9).has()).toEqual({ ship: false, missle: false });
   });
 
+  test('Gameboard with one 5 health ship returns 5 on getHealthOfShips', () => {
+    gameboard.place(3, 3, newShip);
+    expect(gameboard.getHealthOfShips()).toBe(5);
+  });
+
   test('cell.has() returns ship object if present', () => {
     gameboard.place(3, 3, newShip);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
-    expect(gameboard.getCell(7, 3).has().ship).toEqual({ health: 5, length: 5 });
-    expect(gameboard.getCell(8, 3).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 5, length: 5 });
+    expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missle: false });
   });
 
   test('isShip returns true if ship placed vertical', () => {
@@ -52,10 +57,10 @@ describe('Gameboard', () => {
   });
 
   test('only place ships if they fit', () => {
+    expect(gameboard.place(2, 7, newShip, true)).toBe(false);
+    expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missle: false });
     expect(gameboard.place(7, 2, newShip)).toBe(false);
     expect(gameboard.getCell(7, 2).has()).toEqual({ ship: false, missle: false });
-    expect(gameboard.place(2, 7, newShip, false)).toBe(false);
-    expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missle: false });
   });
 
   test('recieveAttack() attack ship if present and record misses', () => {
@@ -63,7 +68,7 @@ describe('Gameboard', () => {
     gameboard.receiveAttack(3, 3);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 4, length: 5 });
     gameboard.receiveAttack(3, 3);
-    expect(gameboard.getCell(7, 3).has().ship).toEqual({ health: 3, length: 5 });
+    expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 3, length: 5 });
     expect(gameboard.receiveAttack(2, 3)).toBe(false);
     expect(gameboard.getMissedAttacks()).toEqual([[2, 3]]);
   });

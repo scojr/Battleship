@@ -42,19 +42,20 @@ export class Gameboard {
   }
   shipsOnBoard = [];
   missedAttacks = [];
-  place(x, y, Ship, isHorizontal = true) {
+  place(x, y, Ship, isHorizontal = false) {
     const shipLength = Ship.length;
     this.shipsOnBoard.push(Ship);
-    if (isHorizontal && x + shipLength > 10 || !isHorizontal && y + shipLength > 10) return false;
-    if (isHorizontal) {
-      for (let i = 0; i < shipLength; i++) {
-        this.getCell((x + i), y).placeShip(Ship);
+    if (isHorizontal && y + shipLength < 10 || !isHorizontal && x + shipLength < 10) {
+      if (isHorizontal) {
+        for (let i = 0; i < shipLength; i++) {
+          this.getCell((y + i), x).placeShip(Ship);
+        }
+      } else {
+        for (let i = 0; i < shipLength; i++) {
+          this.getCell(y, (x + i)).placeShip(Ship);
+        }
       }
-    } else {
-      for (let i = 0; i < shipLength; i++) {
-        this.getCell(x, (y + i)).placeShip(Ship);
-      }
-    }
+    } else return false;
   }
 
   getMissedAttacks() { return this.missedAttacks };
@@ -80,25 +81,50 @@ export class Gameboard {
     return foundSunk;
   }
 
+  getHealthOfShips() {
+    return this.shipsOnBoard.reduce((acc, ship) => { return acc + ship.health }, 0);
+  }
+
   getCell(x, y) {
     return this.grid[x][y];
   }
   getGrid() {
     return this.grid;
   }
-}
-
-export class Player {
-  constructor(isComputer = false) {
-    this.isComputer = isComputer;
-    this.gameboard = new Gameboard;
+  prettyPrintGrid() {
+    this.grid.forEach((row, index) => {
+      const rowText = [];
+      row.forEach(cell => {
+        if (cell.has().ship) rowText.push('[o]');
+        else rowText.push('[ ]')
+      })
+      console.log(index, rowText.join(""));
+    })
   }
 }
 
-class Game {
-  constructor(againstPlayer = false) {
-    this.againstPlayer = againstPlayer;
-    this.gameboard = new Gameboard();
-    this.ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(5)]
+export class Player {
+  constructor(name, isComputer = false) {
+    this.name = name;
+    this.isComputer = isComputer;
+    this.gameboard = new Gameboard;
+    this.ships = [new Ship(5, 'carrier'), new Ship(4, 'battleship'), new Ship(3, 'cruiser'), new Ship(3, 'submarine'), new Ship(2, 'destroyer')]
+  }
+  getPlayerHealth() {
+    return this.gameboard.getHealthOfShips();
+  }
+  place(x, y, Ship, isHorizontal = false) {
+    const shipToPlace = this.ships.find(e => e.type === Ship) || null;
+    if (shipToPlace !== null) {
+      console.log(shipToPlace);
+      this.gameboard.place(x, y, shipToPlace, isHorizontal);
+    }
+  }
+}
+
+export class Game {
+  constructor(player1Name, player2Name = 'Opponent', multiplayer = false) {
+    this.player1 = new Player(player1Name);
+    this.player2 = new Player(player2Name);
   }
 }
