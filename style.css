@@ -80,4 +80,14 @@ body {
   .cell {
     border: 1px solid #808080;
   }
+
+  .player.cell:hover {
+    border: 2px solid black;
+    cursor: pointer;
+  }
+
+  .opponent.cell:hover {
+    border: 2px solid red;
+    cursor: pointer;
+  }
 }
