@@ -1,7 +1,8 @@
 export class Ship {
-  constructor(length) {
+  constructor(length, type) {
     this.length = length;
     this.health = length;
+    this.type = type;
   }
   hit() {
     this.health -= 1;
@@ -39,19 +40,19 @@ export class Gameboard {
       return grid;
     }
   }
-  ships = [];
+  shipsOnBoard = [];
   missedAttacks = [];
-  place(x, y, length, isHorizontal = true) {
-    const ship = new Ship(length);
-    this.ships.push(ship);
-    if (isHorizontal && x + length > 10 || !isHorizontal && y + length > 10) return false;
+  place(x, y, Ship, isHorizontal = true) {
+    const shipLength = Ship.length;
+    this.shipsOnBoard.push(Ship);
+    if (isHorizontal && x + shipLength > 10 || !isHorizontal && y + shipLength > 10) return false;
     if (isHorizontal) {
-      for (let i = 0; i < length; i++) {
-        this.getCell((x + i), y).placeShip(ship);
+      for (let i = 0; i < shipLength; i++) {
+        this.getCell((x + i), y).placeShip(Ship);
       }
     } else {
-      for (let i = 0; i < length; i++) {
-        this.getCell(x, (y + i)).placeShip(ship);
+      for (let i = 0; i < shipLength; i++) {
+        this.getCell(x, (y + i)).placeShip(Ship);
       }
     }
   }
@@ -69,11 +70,11 @@ export class Gameboard {
     }
   }
 
-  getShips() { return this.ships }
+  getShips() { return this.shipsOnBoard }
 
   areShipsSunk() {
     let foundSunk = false;
-    this.ships.forEach(ship => {
+    this.shipsOnBoard.forEach(ship => {
       if (ship.isSunk()) foundSunk = true;
     })
     return foundSunk;
@@ -91,5 +92,13 @@ export class Player {
   constructor(isComputer = false) {
     this.isComputer = isComputer;
     this.gameboard = new Gameboard;
+  }
+}
+
+class Game {
+  constructor(againstPlayer = false) {
+    this.againstPlayer = againstPlayer;
+    this.gameboard = new Gameboard();
+    this.ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(5)]
   }
 }

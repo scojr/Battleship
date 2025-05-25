@@ -25,8 +25,10 @@ describe('Ship', () => {
 describe('Gameboard', () => {
   jest.mock('./objects');
   let gameboard;
+  let newShip;
   beforeEach(() => {
     gameboard = new Gameboard();
+    newShip = new Ship(5)
   });
 
   test('new Gameboard grid has empty cells', () => {
@@ -36,28 +38,28 @@ describe('Gameboard', () => {
   });
 
   test('cell.has() returns ship object if present', () => {
-    gameboard.place(3, 3, 5);
+    gameboard.place(3, 3, newShip);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(7, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(8, 3).has()).toEqual({ ship: false, missle: false });
   });
 
   test('isShip returns true if ship placed vertical', () => {
-    gameboard.place(3, 3, 5, false);
+    gameboard.place(3, 3, newShip, false);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missle: false });
   });
 
   test('only place ships if they fit', () => {
-    expect(gameboard.place(7, 2, 5)).toBe(false);
+    expect(gameboard.place(7, 2, newShip)).toBe(false);
     expect(gameboard.getCell(7, 2).has()).toEqual({ ship: false, missle: false });
-    expect(gameboard.place(2, 7, 5, false)).toBe(false);
+    expect(gameboard.place(2, 7, newShip, false)).toBe(false);
     expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missle: false });
   });
 
   test('recieveAttack() attack ship if present and record misses', () => {
-    gameboard.place(3, 3, 5);
+    gameboard.place(3, 3, newShip);
     gameboard.receiveAttack(3, 3);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 4, length: 5 });
     gameboard.receiveAttack(3, 3);
@@ -67,7 +69,7 @@ describe('Gameboard', () => {
   });
 
   test('areShipsSunk() returns true if all ships have been sunk', () => {
-    gameboard.place(3, 3, 5);
+    gameboard.place(3, 3, newShip);
     gameboard.receiveAttack(3, 3);
     gameboard.receiveAttack(3, 3);
     gameboard.receiveAttack(3, 3);
