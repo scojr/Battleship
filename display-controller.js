@@ -15,7 +15,24 @@ function fillGrids(element, name) {
     cell.addEventListener('click', e => {
       console.log("test");
     })
-    cell.classList.add('cell', name, `x${x}`, `y${y}`)
-    element.append(cell)
+    cell.classList.add('cell', 'empty', name, `x${x % 10}`, `y${y}`)
+    cell.dataset.x = x % 10;
+    cell.dataset.y = y;
+    element.append(cell);
   }
+}
+
+export function refreshPlayerGrid(gameboardObject) {
+  const playerCells = playerGrid.querySelectorAll('.cell');
+  const grid = gameboardObject.getGrid();
+  let x = null;
+  let y = null;
+
+  grid.forEach((row, index) => {
+    y = index;
+    row.forEach((cell, index) => {
+      x = index
+      if (cell.has().ship) playerGrid.querySelector(`.x${x}.y${y}`).classList.add("has-ship");
+    })
+  })
 }

@@ -1,4 +1,5 @@
 import { Game } from "./objects.js";
+import { refreshPlayerGrid } from "./display-controller.js";
 
 let activePlayer = true;
 const stages = [null, 'placement', 'round', 'end']
@@ -26,4 +27,5 @@ function autoPlaceShips(player) {
   player.place(7, 7, 'destroyer');
   console.log(player.gameboard.getGrid());
   player.gameboard.prettyPrintGrid();
+  refreshPlayerGrid(player.gameboard);
 }

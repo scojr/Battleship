@@ -91,3 +91,7 @@ body {
     cursor: pointer;
   }
 }
+
+.has-ship {
+  background-color: gray !important;
+}
