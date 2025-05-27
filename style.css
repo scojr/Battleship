@@ -59,6 +59,55 @@ body {
     '. gameboard .';
 }
 
+.logo {
+  grid-area: title;
+  justify-items: end;
+  margin-top: 10%;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 900;
+    text-decoration: underline overline black;
+  }
+}
+
+.score {
+  grid-area: score;
+  font-size: 3rem;
+  justify-items: end;
+  align-content: center;
+
+  .label {
+    font-size: 1.6rem;
+  }
+
+  .container {
+    border: 1px solid black;
+    padding: 20px;
+  }
+
+  .separator {
+    border-top: 1px solid black;
+    margin-bottom: 20px;
+  }
+}
+
+.active.display {
+  grid-area: display;
+  justify-items: start;
+  margin-top: 10%;
+
+  .text {
+    h2 {
+      font-size: 2em;
+    }
+
+    padding: 20px;
+    text-align: center;
+    border: 1px solid black;
+  }
+}
+
 .gameboard-container {
   grid-area: gameboard;
   display: flex;
@@ -78,6 +127,7 @@ body {
   width: 25em;
 
   .cell {
+    aspect-ratio: 1/1;
     border: 1px solid #808080;
   }
 
@@ -92,6 +142,6 @@ body {
   }
 }
 
-.has-ship {
+.ship {
   background-color: gray !important;
 }
