@@ -104,7 +104,7 @@ export class Gameboard {
 }
 
 export class Player {
-  constructor(name, isComputer = false) {
+  constructor(name, isComputer) {
     this.name = name;
     this.isComputer = isComputer;
     this.gameboard = new Gameboard;
@@ -116,15 +116,35 @@ export class Player {
   place(x, y, Ship, isHorizontal = false) {
     const shipToPlace = this.ships.find(e => e.type === Ship) || null;
     if (shipToPlace !== null) {
-      console.log(shipToPlace);
       this.gameboard.place(x, y, shipToPlace, isHorizontal);
     }
   }
 }
 
 export class Game {
-  constructor(player1Name, player2Name = 'Opponent', multiplayer = false) {
+  constructor(player1Name, player2Name, isMultiplayer = false) {
     this.player1 = new Player(player1Name);
-    this.player2 = new Player(player2Name);
+    if (isMultiplayer) this.player2 = new Player(player2Name);
+    else this.player2 = new Player('Opponent', true);
+    this.phase = 0;
+    this.activePlayer = true;
+  }
+  getPlayer1() {
+    return this.player1;
+  }
+  getPlayer2() {
+    return this.player2;
+  }
+  getStatus() {
+    return this.phase;
+  }
+  getPlayerTurn() {
+    if (this.activePlayer) {
+      this.activePlayer = false;
+      return this.player1;
+    } else {
+      this.activePlayer = true;
+      return this.player2;
+    }
   }
 }
