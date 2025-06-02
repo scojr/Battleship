@@ -1,33 +1,37 @@
+import { clickHandler } from "./click-handler.js";
+
 const elements = {
   gameboardContainer: document.querySelector('.gameboard-container'),
   playerGrid: document.querySelector('.player.grid'),
   opponentGrid: document.querySelector('.opponent.grid'),
-  opponentHealth: document.querySelector('.score .opponent.text'),
-  playerHealth: document.querySelector('.score .opponent.text'),
-  displayHeader: document.querySelector('.display .title'),
-  displayMessage: document.querySelector('.display .message'),
+  displayHeader: document.querySelector('.display .header'),
+  displayMessage: document.querySelector('.display p'),
 }
 
-const scoreInterface = {
-  updatePlayerScore: function (value) {
-    elements.playerHealth.textContent = value;
-  },
-  updateOpponentScore: function (value) {
-    elements.opponentHealth.textContent = value;
-  },
+export function toggleGridOverlay(toggle = false) {
+  toggle = !toggle;
+  if (toggle) {
+    elements.playerGrid.classList.add('inactive');
+    elements.opponentGrid.classList.remove('inactive');
+  } else {
+    elements.opponentGrid.classList.add('inactive');
+    elements.playerGrid.classList.remove('inactive');
+  }
 }
 
-const displayInterface = {
+export const displayInterface = {
   updateHeader: function (string) {
     elements.displayHeader.textContent = string;
   },
   updateMessage: function (string) {
-    elements.displayHeader.textContent = string;
+    elements.displayMessage.textContent = string;
   }
 }
 
-export function drawBoard() {
-  fillGrids(elements.playerGrid, 'player');
+drawBoard();
+
+function drawBoard() {
+  fillGrids(elements.playerGrid, 'primary');
   fillGrids(elements.opponentGrid, 'opponent');
 }
 
@@ -36,7 +40,7 @@ function fillGrids(element, name) {
     let x = i;
     let y = Math.floor(i / 10);
     const cell = document.createElement('div');
-    cell.addEventListener('click', e => cellClick(e.target, name))
+    cell.addEventListener('click', e => clickHandler(e.target, name))
     cell.classList.add('cell', name, `x${x % 10}`, `y${y}`)
     cell.dataset.x = x % 10;
     cell.dataset.y = y;
@@ -59,10 +63,4 @@ export function refreshGrids(gameObject) {
       })
     })
   }
-}
-
-function cellClick(cell, name) {
-  const x = cell.dataset.x;
-  const y = cell.dataset.y;
-  console.log(name, x, y);
 }

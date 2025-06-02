@@ -1,12 +1,27 @@
 import { Game } from "./objects.js";
-import { refreshGrids } from "./display-controller.js";
+import { toggleGridOverlay, refreshGrids, displayInterface } from "./display-controller.js";
 
-export function startGame() {
+const game = startGame();
+autoPlaceShips(game.player1);
+autoPlaceShips2(game.player2);
+refreshGrids(game);
+
+function startGame() {
   const name = "Player";
   const activeGame = new Game(name);
-  autoPlaceShips(activeGame.player1);
-  autoPlaceShips2(activeGame.player2);
-  refreshGrids(activeGame);
+  return activeGame;
+}
+
+export function startRound() {
+  const activePlayer = game.toggleActivePlayer();
+  displayInterface.updateHeader(`${activePlayer.name}, it's your turn!`);
+  displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
+  if (activePlayer === game.getPlayer1()) {
+    console.log('confirm')
+    toggleGridOverlay();
+  } else {
+    toggleGridOverlay(true);
+  }
 }
 
 function autoPlaceShips(player) {

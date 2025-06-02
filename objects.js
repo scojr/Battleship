@@ -126,8 +126,7 @@ export class Game {
     this.player1 = new Player(player1Name);
     if (isMultiplayer) this.player2 = new Player(player2Name);
     else this.player2 = new Player('Opponent', true);
-    this.phase = 0;
-    this.activePlayer = true;
+    this.playerBool = getRandomBool();
   }
   getPlayer1() {
     return this.player1;
@@ -135,16 +134,13 @@ export class Game {
   getPlayer2() {
     return this.player2;
   }
-  getStatus() {
-    return this.phase;
+  toggleActivePlayer() {
+    this.playerBool = !this.playerBool;
+    return this.playerBool ? this.player1 : this.player2;
   }
-  getPlayerTurn() {
-    if (this.activePlayer) {
-      this.activePlayer = false;
-      return this.player1;
-    } else {
-      this.activePlayer = true;
-      return this.player2;
-    }
-  }
+}
+
+function getRandomBool() {
+  const num = Math.floor(Math.random() * 2);
+  return num ? true : false;
 }
