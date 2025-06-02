@@ -119,6 +119,12 @@ export class Player {
       this.gameboard.place(x, y, shipToPlace, isHorizontal);
     }
   }
+  getRandomCoords() {
+    const random10 = function () {
+      return Math.floor(Math.random() * 10);
+    }
+    return { random10, random10 };
+  }
 }
 
 export class Game {
