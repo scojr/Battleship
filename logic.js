@@ -1,5 +1,5 @@
 import { Game } from "./objects.js";
-import { toggleGridOverlay, refreshGrids, displayInterface } from "./display-controller.js";
+import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates } from "./display-controller.js";
 
 const game = startGame();
 autoPlaceShips(game.player1);
@@ -17,9 +17,11 @@ export function startRound() {
   displayInterface.updateHeader(`${activePlayer.name}, it's your turn!`);
   displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
   if (activePlayer === game.getPlayer1()) {
+    buttonStates.fire();
     console.log('confirm')
     toggleGridOverlay();
   } else {
+    buttonStates.inactive();
     toggleGridOverlay(true);
   }
 }

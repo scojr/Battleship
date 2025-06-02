@@ -1,9 +1,8 @@
 import { startRound } from "./logic.js";
 
-const playButton = document.querySelector('button.ready');
+const playButton = document.querySelector('button.game');
 
 playButton.addEventListener('click', (e) => {
-  playButton.style.visibility = 'hidden';
   startRound();
 });
 

@@ -139,20 +139,27 @@ body {
 }
 
 button {
-  background: linear-gradient(rgb(255, 255, 255) 50%, rgb(216, 216, 216) 100%);
   font: inherit;
   font-size: 2rem;
-  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   padding: 12px 36px 0px;
   cursor: pointer;
   height: min-content;
+  background: linear-gradient(rgb(255, 255, 255) 50%, rgb(216, 216, 216) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-button:hover {
+button.inactive {
+  cursor: unset;
+  background: linear-gradient(rgb(255, 255, 255) 50%, rgb(216, 216, 216) 100%);
+  opacity: 40%;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+/* button:hover {
   background: linear-gradient(rgb(247, 247, 247) 0%, rgb(209, 209, 209) 100%);
   border: 1px solid rgba(0, 0, 0, 0.6);
-}
+} */
 
 .shadow {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
