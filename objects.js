@@ -86,7 +86,7 @@ export class Gameboard {
   }
 
   getCell(x, y) {
-    return this.grid[x][y];
+    return this.grid[y][x];
   }
   getGrid() {
     return this.grid;
