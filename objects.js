@@ -144,7 +144,7 @@ export class Game {
   }
   toggleActivePlayer() {
     this.playerBool = !this.playerBool;
-    return this.playerBool ? this.player1 : this.player2;
+    return this.playerBool ? [this.player1, this.player2] : [this.player2, this.player1];
   }
 }
 

@@ -63,6 +63,21 @@ export function refreshGrids(gameObject) {
   }
 }
 
+
+
+export function updateCellState(cellElement) {
+  const targetedCell = document.querySelector('.targeted');
+  if (targetedCell) targetedCell.classList.remove('targeted');
+  const cell = cellElement;
+  const currentClassList = cellElement.classList;
+  const states = {
+    target: cell.classList.add('targeted'),
+    hit: cell.classList.add('hit'),
+    revert: cell.classList = currentClassList,
+  }
+  return states;
+}
+
 export const buttonStates = {
   ready: function () {
     clearButtonClasses();

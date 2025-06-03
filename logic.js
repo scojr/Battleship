@@ -1,5 +1,6 @@
 import { Game } from "./objects.js";
-import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates } from "./display-controller.js";
+import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates, updateCellState } from "./display-controller.js";
+import { onPrimaryCellClick, onOpponentCellClick } from "./click-handler.js";
 
 const game = startGame();
 autoPlaceShips(game.player1);
@@ -12,16 +13,33 @@ function startGame() {
   return activeGame;
 }
 
-export function startRound() {
-  const activePlayer = game.toggleActivePlayer();
-  displayInterface.updateHeader(`${activePlayer.name}, it's your turn!`);
-  displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
+export function newRound() {
+  const players = game.toggleActivePlayer();
+  const activePlayer = players[0];
+  const enemyPlayer = players[1];
+  newRoundDisplay(players);
   buttonStates.inactive();
   if (activePlayer === game.getPlayer1()) {
     toggleGridOverlay();
+    onOpponentCellClick((cell) => {
+      updateCellState(cell).target;
+      enemyPlayer.gameboard.receiveAttack(cell.dataset.x, cell.dataset.y);
+      refreshGrids(game);
+      buttonStates.fire();
+    });
   } else {
     toggleGridOverlay(true);
+    if (activePlayer.isComputer) {
+      const computerGuess = activePlayer.getRandomCoords();
+      enemyPlayer.gameboard.receiveAttack(computerGuess.x, computerGuess.y)
+      refreshGrids(game);
+    }
   }
+}
+
+function newRoundDisplay(players) {
+  displayInterface.updateHeader(`${players[0].name}, it's your turn!`);
+  displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
 }
 
 function autoPlaceShips(player) {
