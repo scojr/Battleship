@@ -16,12 +16,10 @@ export function startRound() {
   const activePlayer = game.toggleActivePlayer();
   displayInterface.updateHeader(`${activePlayer.name}, it's your turn!`);
   displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
+  buttonStates.inactive();
   if (activePlayer === game.getPlayer1()) {
-    buttonStates.fire();
-    console.log('confirm')
     toggleGridOverlay();
   } else {
-    buttonStates.inactive();
     toggleGridOverlay(true);
   }
 }

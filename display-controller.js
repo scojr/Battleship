@@ -1,5 +1,3 @@
-import { clickHandler } from './click-handler.js';
-
 const elements = {
   gameboardContainer: document.querySelector('.gameboard-container'),
   playerGrid: document.querySelector('.player.grid'),
@@ -41,7 +39,6 @@ function fillGrids(element, name) {
     let x = i;
     let y = Math.floor(i / 10);
     const cell = document.createElement('div');
-    cell.addEventListener('click', e => clickHandler(e.target, name))
     cell.classList.add('cell', name, `x${x % 10}`, `y${y}`)
     cell.dataset.x = x % 10;
     cell.dataset.y = y;

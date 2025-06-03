@@ -123,7 +123,9 @@ export class Player {
     const random10 = function () {
       return Math.floor(Math.random() * 10);
     }
-    return { random10, random10 };
+    let x = random10();
+    let y = random10();
+    return { x, y };
   }
 }
 

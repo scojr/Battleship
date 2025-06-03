@@ -100,6 +100,7 @@ body {
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
   width: 25em;
+  box-shadow: rgb(0, 0, 0, 0.3) 0px 2px 7px;
 
   .cell {
     aspect-ratio: 1/1;
@@ -118,20 +119,26 @@ body {
   }
 }
 
-.grid.inactive::after {
-  position: absolute;
-  content: "";
-  scale: 1.005;
-  background-color: rgb(241, 241, 241);
-  opacity: 60%;
-  width: inherit;
-  aspect-ratio: 1/1;
+.grid.active {
+  .cell {
+    box-shadow: 0px 0px 0px 1px rgb(36, 36, 36);
+  }
 }
 
 .grid.inactive {
   .cell {
-    box-shadow: 0px 0px 0px 1px rgb(145, 145, 145);
+    box-shadow: 0px 0px 0px 1px rgb(143, 143, 143);
   }
+}
+
+.grid.inactive::after {
+  position: absolute;
+  content: "";
+  scale: 1.03;
+  background-color: rgb(241, 241, 241);
+  opacity: 60%;
+  width: inherit;
+  aspect-ratio: 1/1;
 }
 
 .ship {
@@ -154,12 +161,15 @@ button.inactive {
   background: linear-gradient(rgb(255, 255, 255) 50%, rgb(216, 216, 216) 100%);
   opacity: 40%;
   border: 1px solid rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
-/* button:hover {
-  background: linear-gradient(rgb(247, 247, 247) 0%, rgb(209, 209, 209) 100%);
+button:hover {
   border: 1px solid rgba(0, 0, 0, 0.6);
-} */
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 8px;
+  background-blend-mode: color;
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
 .shadow {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
