@@ -1,6 +1,6 @@
 import { Game } from "./objects.js";
 import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates, updateCellState } from "./display-controller.js";
-import { onPrimaryCellClick, onOpponentCellClick } from "./click-handler.js";
+import { onPrimaryCellClick, onOpponentCellClick, onButtonClick } from "./click-handler.js";
 
 const game = startGame();
 autoPlaceShips(game.player1);
@@ -10,10 +10,12 @@ refreshGrids(game);
 function startGame() {
   const name = "Player";
   const activeGame = new Game(name);
+  onButtonClick(newRound)
   return activeGame;
 }
 
 export function newRound() {
+  onButtonClick(newRound)
   const players = game.toggleActivePlayer();
   const activePlayer = players[0];
   const enemyPlayer = players[1];
@@ -22,19 +24,30 @@ export function newRound() {
   if (activePlayer === game.getPlayer1()) {
     toggleGridOverlay();
     onOpponentCellClick((cell) => {
-      updateCellState(cell).target;
-      enemyPlayer.gameboard.receiveAttack(cell.dataset.x, cell.dataset.y);
+      updateCellState(cell).target();
       refreshGrids(game);
       buttonStates.fire();
+      onButtonClick(confirmAttack)
+      function confirmAttack() {
+        updateCellState(cell).untarget();
+        enemyPlayer.gameboard.receiveAttack(cell.dataset.x, cell.dataset.y);
+        intermission();
+      }
     });
   } else {
     toggleGridOverlay(true);
     if (activePlayer.isComputer) {
       const computerGuess = activePlayer.getRandomCoords();
       enemyPlayer.gameboard.receiveAttack(computerGuess.x, computerGuess.y)
-      refreshGrids(game);
+      intermission();
     }
   }
+}
+
+function intermission() {
+  refreshGrids(game);
+  buttonStates.continue();
+  onButtonClick(newRound)
 }
 
 function newRoundDisplay(players) {

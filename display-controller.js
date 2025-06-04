@@ -49,32 +49,42 @@ function fillGrids(element, name) {
 export function refreshGrids(gameObject) {
   refreshGrid(gameObject.player1.gameboard, elements.playerGrid);
   refreshGrid(gameObject.player2.gameboard, elements.opponentGrid);
-  function refreshGrid(player, gridElement) {
-    const grid = player.getGrid();
+  function refreshGrid(playerGameboard, gridElement) {
+    const grid = playerGameboard.getGrid();
     let x = null;
     let y = null;
     grid.forEach((row, index) => {
       y = index;
       row.forEach((cell, index) => {
         x = index
-        if (cell.has().ship) gridElement.querySelector(`.x${x}.y${y}`).classList.add('ship');
+        const cellObject = playerGameboard.getCell(x, y);
+        const cellElement = gridElement.querySelector(`.x${x}.y${y}`);
+        const classes = convertCellPropsToClass(cellObject);
+        cellElement.classList.add(...classes);
       })
     })
   }
 }
 
-
+function convertCellPropsToClass(cellObject) {
+  const classes = [];
+  const has = cellObject.has();
+  if (has.ship) classes.push('ship');
+  if (has.missile) classes.push('missile');
+  return classes;
+}
 
 export function updateCellState(cellElement) {
   const targetedCell = document.querySelector('.targeted');
   if (targetedCell) targetedCell.classList.remove('targeted');
   const cell = cellElement;
   const currentClassList = cellElement.classList;
-  const states = {
-    target: cell.classList.add('targeted'),
-    hit: cell.classList.add('hit'),
-    revert: cell.classList = currentClassList,
-  }
+  function target() { cell.classList.add('targeted') };
+  function untarget() { cell.classList.remove('targeted') };
+  function hit() { cell.classList.add('missile') };
+  function revert() { cell.classList = currentClassList };
+
+  const states = { target, hit, untarget, revert }
   return states;
 }
 
@@ -93,6 +103,11 @@ export const buttonStates = {
     clearButtonClasses();
     elements.button.classList.add('inactive');
     elements.button.textContent = 'Fire';
+  },
+  continue: function () {
+    clearButtonClasses();
+    elements.button.classList.add('continue');
+    elements.button.textContent = 'Continue';
   },
   hidden: function () {
     clearButtonClasses();

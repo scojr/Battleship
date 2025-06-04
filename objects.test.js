@@ -32,9 +32,9 @@ describe('Gameboard', () => {
   });
 
   test('new Gameboard grid has empty cells', () => {
-    expect(gameboard.getCell(0, 0).has()).toEqual({ ship: false, missle: false });
-    expect(gameboard.getCell(4, 4).has()).toEqual({ ship: false, missle: false });
-    expect(gameboard.getCell(9, 9).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(0, 0).has()).toEqual({ ship: false, missile: false });
+    expect(gameboard.getCell(4, 4).has()).toEqual({ ship: false, missile: false });
+    expect(gameboard.getCell(9, 9).has()).toEqual({ ship: false, missile: false });
   });
 
   test('Gameboard with one 5 health ship returns 5 on getHealthOfShips', () => {
@@ -46,21 +46,21 @@ describe('Gameboard', () => {
     gameboard.place(3, 3, newShip);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 5, length: 5 });
-    expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missile: false });
   });
 
   test('isShip returns true if ship placed vertical', () => {
     gameboard.place(3, 3, newShip, false);
     expect(gameboard.getCell(3, 3).has().ship).toEqual({ health: 5, length: 5 });
     expect(gameboard.getCell(3, 7).has().ship).toEqual({ health: 5, length: 5 });
-    expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(3, 8).has()).toEqual({ ship: false, missile: false });
   });
 
   test('only place ships if they fit', () => {
     expect(gameboard.place(2, 7, newShip, true)).toBe(false);
-    expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(2, 7).has()).toEqual({ ship: false, missile: false });
     expect(gameboard.place(7, 2, newShip)).toBe(false);
-    expect(gameboard.getCell(7, 2).has()).toEqual({ ship: false, missle: false });
+    expect(gameboard.getCell(7, 2).has()).toEqual({ ship: false, missile: false });
   });
 
   test('recieveAttack() attack ship if present and record misses', () => {

@@ -15,13 +15,13 @@ export class Ship {
 
 class Cell {
   #ship = false;
-  #missle = false;
+  #missile = false;
   placeShip(ship) { this.#ship = ship };
-  placeMissle() {
-    this.#missle = true
+  placeMissile() {
+    this.#missile = true
     if (this.#ship) this.#ship.hit();
   };
-  has() { return { ship: this.#ship, missle: this.#missle } }
+  has() { return { ship: this.#ship, missile: this.#missile } }
 }
 
 export class Gameboard {
@@ -62,8 +62,8 @@ export class Gameboard {
 
   receiveAttack(x, y) {
     const attackedCell = this.getCell(x, y);
+    attackedCell.placeMissile();
     if (attackedCell.has().ship) {
-      attackedCell.placeMissle();
       return true;
     } else {
       this.missedAttacks.push([x, y]);
