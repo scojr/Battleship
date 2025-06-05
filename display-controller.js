@@ -74,6 +74,15 @@ function convertCellPropsToClass(cellObject) {
   return classes;
 }
 
+export function updateGridState(num) {
+  const grid = [elements.playerGrid, elements.opponentGrid][num];
+  function clicksOff() { grid.classList.add('pointer-events-off') };
+  function clicksOn() { grid.classList.remove('pointer-events-off') };
+
+  const states = { clicksOff, clicksOn }
+  return states;
+}
+
 export function updateCellState(cellElement) {
   const targetedCell = document.querySelector('.targeted');
   if (targetedCell) targetedCell.classList.remove('targeted');

@@ -1,5 +1,5 @@
 import { Game } from "./objects.js";
-import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates, updateCellState } from "./display-controller.js";
+import { toggleGridOverlay, refreshGrids, displayInterface, buttonStates, updateCellState, updateGridState } from "./display-controller.js";
 import { onPrimaryCellClick, onOpponentCellClick, onButtonClick } from "./click-handler.js";
 
 const game = startGame();
@@ -15,6 +15,7 @@ function startGame() {
 }
 
 export function newRound() {
+  updateGridState(1).clicksOn();
   onButtonClick(newRound)
   const players = game.toggleActivePlayer();
   const activePlayer = players[0];
@@ -50,6 +51,7 @@ export function newRound() {
 }
 
 function intermission() {
+  updateGridState(1).clicksOff();
   refreshGrids(game);
   buttonStates.continue();
   onButtonClick(newRound)

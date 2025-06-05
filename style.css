@@ -132,6 +132,10 @@ body {
   }
 }
 
+.grid.pointer-events-off {
+  pointer-events: none;
+}
+
 .cell.missile::after {
   position: absolute;
   scale: 0.5;
