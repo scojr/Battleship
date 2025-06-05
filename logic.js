@@ -37,8 +37,13 @@ export function newRound() {
   } else {
     toggleGridOverlay(true);
     if (activePlayer.isComputer) {
-      const computerGuess = activePlayer.getRandomCoords();
-      enemyPlayer.gameboard.receiveAttack(computerGuess.x, computerGuess.y)
+      let randomCoords;
+      let cell;
+      do {
+        randomCoords = activePlayer.getRandomCoords();
+        cell = enemyPlayer.gameboard.getCell(randomCoords.x, randomCoords.y)
+      } while (cell.has().missile);
+      enemyPlayer.gameboard.receiveAttack(randomCoords.x, randomCoords.y)
       intermission();
     }
   }
