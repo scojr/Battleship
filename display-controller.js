@@ -55,17 +55,17 @@ export function refreshGrids(gameObject) {
         x = index
         const cellObject = playerGameboard.getCell(x, y);
         const cellElement = gridElement.querySelector(`.x${x}.y${y}`);
-        const classes = convertCellPropsToClass(cellObject);
+        const classes = convertCellPropsToClass(cellObject, gridElement);
         cellElement.classList.add(...classes);
       })
     })
   }
 }
 
-function convertCellPropsToClass(cellObject) {
+function convertCellPropsToClass(cellObject, gridElement) {
   const classes = [];
   const has = cellObject.has();
-  if (has.ship) classes.push('ship');
+  if (!gridElement.classList.contains('opponent') && has.ship) classes.push('ship');
   if (has.missile) classes.push('missile');
   return classes;
 }
