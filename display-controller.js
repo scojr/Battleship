@@ -67,6 +67,7 @@ function convertCellPropsToClass(cellObject, gridElement) {
   const has = cellObject.has();
   if (!gridElement.classList.contains('opponent') && has.ship) classes.push('ship');
   if (has.missile) classes.push('missile');
+  if (has.missile && has.ship) classes.push('ship-hit');
   return classes;
 }
 
@@ -87,9 +88,10 @@ export function updateCellState(cellElement) {
   function target() { cell.classList.add('targeted') };
   function untarget() { cell.classList.remove('targeted') };
   function hit() { cell.classList.add('missile') };
+  function hitShip() { cell.classList.add('hit-ship') };
   function revert() { cell.classList = currentClassList };
 
-  const states = { target, hit, untarget, revert }
+  const states = { target, hit, hitShip, untarget, revert }
   return states;
 }
 
