@@ -16,12 +16,15 @@ export class Ship {
 class Cell {
   #ship = false;
   #missile = false;
+  #element;
   placeShip(ship) { this.#ship = ship };
   placeMissile() {
     this.#missile = true
     if (this.#ship) this.#ship.hit();
   };
   has() { return { ship: this.#ship, missile: this.#missile } }
+  setElement(element) { this.#element = element };
+  getElement() { return this.#element };
 }
 
 export class Gameboard {

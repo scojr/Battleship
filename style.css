@@ -51,9 +51,8 @@ body {
   height: 100vh;
   line-height: 1.5;
   display: grid;
-  row-gap: 40px;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 10% 1fr 1fr;
+  grid-template-rows: min-content 1fr 1fr;
   grid-template-areas:
     ' . . display . . '
     ' . . gameboard . . '
@@ -63,10 +62,9 @@ body {
 .active.display {
   background: linear-gradient(rgb(255, 255, 255) 70%, rgb(228, 228, 228));
   grid-area: display;
-  align-content: center;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
-  margin-top: 12px;
+  margin-top: 40px;
   text-align: start;
   padding: 12px 12px 5px;
   font-size: 1.4em;
@@ -76,6 +74,7 @@ body {
 .gameboard-container {
   grid-area: gameboard;
   display: flex;
+  align-self: center;
   justify-content: space-between;
   width: 100%;
   gap: 100px;

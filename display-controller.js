@@ -56,6 +56,7 @@ export function refreshGrids(gameObject) {
         const cellObject = playerGameboard.getCell(x, y);
         const cellElement = gridElement.querySelector(`.x${x}.y${y}`);
         const classes = convertCellPropsToClass(cellObject, gridElement);
+        cellObject.setElement(cellElement);
         cellElement.classList.add(...classes);
       })
     })
