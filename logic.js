@@ -31,8 +31,8 @@ export function newRound() {
       onButtonClick(confirmAttack)
       function confirmAttack() {
         updateCellState(cell).untarget();
-        enemyPlayer.gameboard.receiveAttack(cell.dataset.x, cell.dataset.y);
-        intermission();
+        const hit = enemyPlayer.gameboard.receiveAttack(cell.dataset.x, cell.dataset.y);
+        intermission(activePlayer.name, hit);
       }
     });
   } else {
@@ -44,22 +44,23 @@ export function newRound() {
         randomCoords = activePlayer.getRandomCoords();
         cell = enemyPlayer.gameboard.getCell(randomCoords.x, randomCoords.y)
       } while (cell.has().missile);
-      enemyPlayer.gameboard.receiveAttack(randomCoords.x, randomCoords.y)
-      intermission();
+      const hit = enemyPlayer.gameboard.receiveAttack(randomCoords.x, randomCoords.y)
+      intermission(activePlayer.name, hit);
     }
   }
 }
 
-function intermission() {
+function intermission(playerName, isHit) {
+  let hitMessage = isHit ? `${playerName} landed a hit!` : `${playerName} missed.`;
+  displayInterface.updateHeader(hitMessage);
   updateGridState(1).clicksOff();
   refreshGrids(game);
-  buttonStates.continue();
+  buttonStates.next();
   onButtonClick(newRound)
 }
 
 function newRoundDisplay(players) {
-  displayInterface.updateHeader(`${players[0].name}, it's your turn!`);
-  displayInterface.updateMessage('Select a cell, then click the \'Fire!\' button to attack!');
+  displayInterface.updateHeader(`${players[0].name}, click a cell to attack.`);
 }
 
 function autoPlaceShips(player) {

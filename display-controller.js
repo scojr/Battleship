@@ -3,7 +3,6 @@ const elements = {
   playerGrid: document.querySelector('.player.grid'),
   opponentGrid: document.querySelector('.opponent.grid'),
   displayHeader: document.querySelector('.display .header'),
-  displayMessage: document.querySelector('.display p'),
   button: document.querySelector('button.game')
 }
 
@@ -21,9 +20,6 @@ export function toggleGridOverlay(toggle = false) {
 export const displayInterface = {
   updateHeader: function (string) {
     elements.displayHeader.textContent = string;
-  },
-  updateMessage: function (string) {
-    elements.displayMessage.textContent = string;
   }
 }
 
@@ -113,10 +109,10 @@ export const buttonStates = {
     elements.button.classList.add('inactive');
     elements.button.textContent = 'Fire';
   },
-  continue: function () {
+  next: function () {
     clearButtonClasses();
-    elements.button.classList.add('continue');
-    elements.button.textContent = 'Continue';
+    elements.button.classList.add('next');
+    elements.button.textContent = 'Next Turn';
   },
   hidden: function () {
     clearButtonClasses();
