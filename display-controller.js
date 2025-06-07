@@ -88,11 +88,13 @@ export function updateCellState(cellElement) {
   const currentClassList = cellElement.classList;
   function target() { cell.classList.add('targeted') };
   function untarget() { cell.classList.remove('targeted') };
+  function computerTarget() { cell.classList.add('computer-targeted') };
+  function computerUntarget() { cell.classList.remove('computer-targeted') };
   function hit() { cell.classList.add('missile') };
   function hitShip() { cell.classList.add('hit-ship') };
   function revert() { cell.classList = currentClassList };
 
-  const states = { target, hit, hitShip, untarget, revert }
+  const states = { target, hit, hitShip, untarget, computerTarget, computerUntarget, revert }
   return states;
 }
 

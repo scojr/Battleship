@@ -44,8 +44,14 @@ export function newRound() {
         randomCoords = activePlayer.getRandomCoords();
         cell = enemyPlayer.gameboard.getCell(randomCoords.x, randomCoords.y)
       } while (cell.has().missile);
-      const hit = enemyPlayer.gameboard.receiveAttack(randomCoords.x, randomCoords.y)
-      intermission(activePlayer.name, hit);
+      const cellElement = cell.getElement();
+      updateCellState(cellElement).computerTarget();
+      displayInterface.updateHeader('Opponent is attacking.');
+      setTimeout(() => {
+        updateCellState(cellElement).computerUntarget();
+        const hit = enemyPlayer.gameboard.receiveAttack(randomCoords.x, randomCoords.y);
+        intermission(activePlayer.name, hit);
+      }, 1500);
     }
   }
 }

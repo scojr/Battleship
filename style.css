@@ -115,16 +115,12 @@ body {
   }
 }
 
-.grid.active {
-  .cell {
-    box-shadow: 0px 0px 0px 1px rgb(36, 36, 36);
-  }
+.grid .cell {
+  box-shadow: 0px 0px 0px 1px rgb(36, 36, 36);
 }
 
-.grid.inactive {
-  .cell {
-    box-shadow: 0px 0px 0px 1px rgb(143, 143, 143);
-  }
+.grid.inactive .cell {
+  box-shadow: 0px 0px 0px 1px rgb(143, 143, 143);
 }
 
 .grid.pointer-events-off {
@@ -147,8 +143,7 @@ body {
 }
 
 .cell.targeted {
-  box-shadow: 0px 0px 0px 1px rgb(114, 114, 114), inset 0px 0px 9px 3px rgb(255, 0, 0);
-  opacity: 40%;
+  box-shadow: 0px 0px 0px 1px rgb(114, 114, 114), inset 0px 0px 9px 3px rgba(255, 0, 0, 0.4);
 }
 
 .cell.ship {
@@ -158,6 +153,19 @@ body {
 .cell.missile.ship-hit {
 
   background-color: rgb(128, 86, 86);
+}
+
+@keyframes blinker {
+  50% {
+    visibility: hidden;
+  }
+}
+
+.cell.computer-targeted {
+  border: 2px dashed red;
+  box-shadow: 0px 0px 0px 1px rgb(114, 114, 114), inset 0px 0px 9px 3px rgba(255, 0, 0, 0.4);
+  animation-delay: 0.2s;
+  animation: blinker 0.3s step-end 3;
 }
 
 .grid.inactive::after {
