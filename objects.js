@@ -18,10 +18,22 @@ class Gameboard {
   }
   ships = [];
   missedAttacks = [];
-  placeShip(x, y, length, axis = x) {
+  placeShip(x, y, length, rotate = false) {
+    if (x < 0 || y < 0) return;
+    let axis;
+    rotate ? axis = y : axis = x;
     if (axis + length > 10) return;
+    const shipCoords = [];
+    for (let i = 0; i < length; i++) {
+      let cell;
+      rotate ? cell = { x, y: y + i } : cell = { x: x + i, y };
+      if (this.grid[cell.x][cell.y]) return false;
+      else shipCoords.push(cell);
+    }
     let ship = new Ship(length);
-    this.grid[y][x] = ship;
+    shipCoords.forEach((coord) => {
+      this.grid[coord.x][coord.y] = ship;
+    })
     this.ships.push(ship);
   }
   recieveAttack(x, y) {
@@ -66,4 +78,14 @@ export class Player {
     this.isCPU = isCPU;
   }
   gameboard = new Gameboard;
+  autoPlaceShips() {
+    const shipLengths = [5, 4, 3, 3, 2];
+    const shipLocations = []
+    // shipLengths.forEach((length) =>)
+    this.gameboard.placeShip(2, 3, 3)
+    this.gameboard.placeShip(1, 5, 2)
+    this.gameboard.placeShip(1, 8, 5)
+    this.gameboard.placeShip(7, 1, 4, true)
+    this.gameboard.placeShip(7, 6, 3, true)
+  }
 }

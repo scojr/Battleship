@@ -10,6 +10,5 @@ function startGame() {
 
 startGame();
 
-player1.gameboard.placeShip(3, 1, 5);
+player1.autoPlaceShips();
 player1.gameboard.printGrid();
-console.log(player1.gameboard.getCell(3, 1));
