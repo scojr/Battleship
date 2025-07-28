@@ -27,12 +27,12 @@ class Gameboard {
     for (let i = 0; i < length; i++) {
       let cell;
       rotate ? cell = { x, y: y + i } : cell = { x: x + i, y };
-      if (this.grid[cell.x][cell.y]) return false;
+      if (this.grid[cell.y][cell.x]) return false;
       else shipCoords.push(cell);
     }
     let ship = new Ship(length);
     shipCoords.forEach((coord) => {
-      this.grid[coord.x][coord.y] = ship;
+      this.grid[coord.y][coord.x] = ship;
     })
     this.ships.push(ship);
   }
@@ -77,15 +77,15 @@ export class Player {
   constructor(isCPU = false) {
     this.isCPU = isCPU;
   }
+
   gameboard = new Gameboard;
-  autoPlaceShips() {
-    const shipLengths = [5, 4, 3, 3, 2];
-    const shipLocations = []
-    // shipLengths.forEach((length) =>)
-    this.gameboard.placeShip(2, 3, 3)
-    this.gameboard.placeShip(1, 5, 2)
-    this.gameboard.placeShip(1, 8, 5)
-    this.gameboard.placeShip(7, 1, 4, true)
-    this.gameboard.placeShip(7, 6, 3, true)
+
+  autoPlaceShips(num) {
+    const shipsLayouts = [
+      [[1, 8, 5], [7, 1, 4, true], [7, 6, 3, true], [2, 3, 3], [1, 5, 2]],
+      [[4, 1, 5], [3, 5, 4, true], [1, 3, 3, true], [5, 6, 3], [5, 3, 2, true]]
+    ]
+    let layout = shipsLayouts[num];
+    layout.forEach((coord) => this.gameboard.placeShip(...coord))
   }
 }
