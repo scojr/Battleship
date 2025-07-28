@@ -1,4 +1,4 @@
-export class Ship {
+class Ship {
   constructor(length) {
     this.length = length;
   }
@@ -12,15 +12,16 @@ export class Ship {
   }
 }
 
-export class Gameboard {
+class Gameboard {
   constructor() {
     this.grid = createGrid();
   }
   ships = [];
   missedAttacks = [];
-  placeShip(x, y, length, rotate) {
+  placeShip(x, y, length, axis = x) {
+    if (axis + length > 10) return;
     let ship = new Ship(length);
-    this.grid[x][y] = ship;
+    this.grid[y][x] = ship;
     this.ships.push(ship);
   }
   recieveAttack(x, y) {
@@ -38,7 +39,12 @@ export class Gameboard {
     return true;
   }
   getCell(x, y) {
-    return this.grid[x][y];
+    return this.grid[y][x];
+  }
+  printGrid() {
+    for (let row of this.grid) {
+      console.log(row);
+    }
   }
 }
 
@@ -55,7 +61,7 @@ function createGrid() {
   return grid;
 }
 
-class Player {
+export class Player {
   constructor(isCPU = false) {
     this.isCPU = isCPU;
   }
