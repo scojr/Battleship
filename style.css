@@ -1,0 +1,84 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: orange;
+}
+
+/* html {
+  font-size: 20px;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+} */
+
+html {
+  font-size: 20px;
+  font-family: 'Nimbus Mono PS', 'Courier New', monospace;
+  font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+body {
+  line-height: 1.5;
+  background-color: black;
+}
+
+header {
+  margin-bottom: 10vh;
+}
+
+.gameboards {
+  gap: 5vw;
+  justify-content: center;
+
+  .gameboard {
+    gap: 2px;
+    aspect-ratio: 1/1;
+    height: 100%;
+    border: 2px solid rgba(18, 199, 18, 0.822);
+  }
+
+}
+
+.flex {
+  display: flex;
+
+  &.column {
+    flex-direction: column;
+  }
+}
+
+.row {
+  width: min-content;
+  height: min-content;
+  gap: inherit;
+
+  .cell {
+    height: 4vw;
+    max-height: 60px;
+    aspect-ratio: 1/1;
+    box-shadow: 0px 0px 0px 1px rgba(18, 199, 18, 0.514);
+  }
+}
