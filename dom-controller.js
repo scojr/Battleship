@@ -4,6 +4,8 @@ const playerBoards = {
 }
 
 function updateGameboards(player1, player2) {
+  playerBoards['1'].innerHTML = '';
+  playerBoards['2'].innerHTML = '';
 
   insertGrid(player1, playerBoards['1']);
   insertGrid(player2, playerBoards['2']);
@@ -25,8 +27,6 @@ function updateGameboards(player1, player2) {
       gameboardEl.append(rowEl);
     })
   }
-
-
 }
 
 

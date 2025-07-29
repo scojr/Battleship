@@ -62,9 +62,9 @@ class Gameboard {
 
 function createGrid() {
   const grid = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 11; i++) {
     const row = [];
-    for (let j = 0; j < 10; j++) {
+    for (let j = 0; j < 11; j++) {
       let cell = null;
       row.push(cell)
     }
