@@ -40,18 +40,30 @@ svg {
   max-inline-size: 100%;
 }
 
+button {
+  all: unset;
+}
+
 body {
   line-height: 1.5;
   background-color: black;
 }
 
 header {
-  margin-bottom: 10vh;
+  margin-bottom: 2vh;
+
+  h1 {
+    position: relative;
+    z-index: 1;
+    margin-top: 4vh;
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+  }
 }
 
 .gameboards {
-  gap: 5vw;
-  justify-content: center;
+  justify-content: space-around;
 
   .gameboard {
     gap: 2px;
@@ -60,7 +72,12 @@ header {
     border: 2px solid rgba(18, 199, 18, 0.822);
     box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
   }
+}
 
+.gameboard-headers {
+  color: rgba(255, 255, 255, 0.445);
+  justify-content: space-around;
+  margin-bottom: 4px;
 }
 
 .flex {
@@ -96,4 +113,67 @@ header {
 
 .row:nth-child(even) {
   background-color: rgb(4, 24, 3);
+}
+
+.new-game-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  background-color: black;
+  background-color: hsla(0, 0%, 5%, 0.6);
+  /* visibility: hidden; */
+  display: flex;
+  justify-content: center;
+}
+
+.modal-content {
+  margin-top: 20vh;
+  color: white;
+  background-color: black;
+  box-shadow: 0px 4px 24px 20px black;
+  height: min-content;
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .modal-button-container {
+    gap: 20px;
+  }
+
+  button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 160px;
+    aspect-ratio: 1 / 1;
+    background-color: rgb(0, 0, 0);
+    border: 2px solid rgba(18, 199, 18, 1);
+    box-shadow: 0px 0px 12px 3px rgba(18, 199, 18, 0.4);
+    text-align: center;
+    padding: 4px;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0px 0px 12px 8px rgba(18, 199, 18, 0.5), 0px 0px 12px 8px rgba(18, 199, 18, 0.5) inset;
+    }
+
+    .icon {
+      position: relative;
+      bottom: 8px;
+      height: 60px;
+    }
+
+    .play-text {
+      position: relative;
+      top: 6px;
+      margin-bottom: -24px;
+      font-size: 2em;
+    }
+  }
 }

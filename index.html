@@ -10,11 +10,32 @@
 </head>
 
 <body>
-  <header></header>
+  <header>
+    <h1>Battleship</h1>
+  </header>
   <div class="game-container">
+    <div class="gameboard-headers flex">
+      <h2 class="gameboard-header player-1">Your Board</h2>
+      <h2 class="gameboard-header player-2">Opponent's Board</h2>
+    </div>
     <div class="gameboards flex">
       <div class="gameboard flex column player-1"></div>
       <div class="gameboard flex column player-2"></div>
+    </div>
+  </div>
+  <div class="new-game-modal">
+    <div class="modal-content">
+      <h1>New Game</h1>
+      <div class="modal-button-container flex">
+        <button class="play-cpu">
+          <span class="play-text">Play</span> vs CPU
+          <img src="./images/robot.svg" alt="Robot icon" class="icon">
+        </button>
+        <button class="play-friend">
+          <span class="play-text">Play</span>vs Friend
+          <img src="./images/friend.svg" alt="Two people icon" class="icon">
+        </button>
+      </div>
     </div>
   </div>
 </body>
