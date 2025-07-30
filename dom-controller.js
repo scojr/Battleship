@@ -1,11 +1,13 @@
 import { startGame } from "./game-logic.js";
 
+const gameboardsEl = document.querySelector('.gameboards');
+
 const playerBoards = {
   1: document.querySelector('.gameboard.player-1'),
   2: document.querySelector('.gameboard.player-2'),
 }
 
-const newGameModal = document.querySelector('.new-game-modal')
+const newGameModalEl = document.querySelector('.new-game-modal')
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
@@ -22,10 +24,10 @@ newGameButtonEls.playFriend.addEventListener('click', () => {
 })
 
 function closeNewGameModal() {
-  newGameModal.style.visibility = 'hidden';
+  newGameModalEl.style.visibility = 'hidden';
 }
 
-function updateGameboards(player1, player2) {
+export function updateGameboards(player1, player2) {
   playerBoards['1'].innerHTML = '';
   playerBoards['2'].innerHTML = '';
 
@@ -51,4 +53,10 @@ function updateGameboards(player1, player2) {
   }
 }
 
-export { updateGameboards };
+export function gameboardDisplayControl(bool, player) {
+  let elToHide = gameboardsEl;
+  if (player === 1) elToHide = playerBoards[1];
+  if (player === 2) elToHide = playerBoards[2];
+  if (bool) elToHide.classList.remove('hidden');
+  else elToHide.classList.add('hidden');
+}
