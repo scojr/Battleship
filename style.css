@@ -75,7 +75,7 @@ header {
 }
 
 .gameboard-headers {
-  color: rgba(255, 255, 255, 0.445);
+  color: rgba(255, 255, 255, 0.45);
   justify-content: space-around;
   margin-bottom: 4px;
 }

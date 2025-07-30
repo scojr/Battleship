@@ -1,6 +1,28 @@
+import { startGame } from "./game-logic.js";
+
 const playerBoards = {
   1: document.querySelector('.gameboard.player-1'),
   2: document.querySelector('.gameboard.player-2'),
+}
+
+const newGameModal = document.querySelector('.new-game-modal')
+
+const newGameButtonEls = {
+  'playCpu': document.querySelector('.play-cpu'),
+  'playFriend': document.querySelector('.play-friend'),
+}
+
+newGameButtonEls.playCpu.addEventListener('click', () => {
+  startGame();
+  closeNewGameModal();
+})
+newGameButtonEls.playFriend.addEventListener('click', () => {
+  startGame();
+  closeNewGameModal();
+})
+
+function closeNewGameModal() {
+  newGameModal.style.visibility = 'hidden';
 }
 
 function updateGameboards(player1, player2) {
@@ -28,8 +50,5 @@ function updateGameboards(player1, player2) {
     })
   }
 }
-
-
-
 
 export { updateGameboards };
