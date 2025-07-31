@@ -115,7 +115,7 @@ header {
   background-color: rgb(4, 24, 3);
 }
 
-.new-game-modal {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -124,9 +124,12 @@ header {
   overflow: auto;
   background-color: black;
   background-color: hsla(0, 0%, 5%, 0.6);
-  /* visibility: hidden; */
   display: flex;
   justify-content: center;
+}
+
+.intermission.modal {
+  visibility: hidden;
 }
 
 .modal-content {
@@ -142,6 +145,7 @@ header {
   }
 
   .modal-button-container {
+    justify-content: center;
     gap: 20px;
   }
 
@@ -169,13 +173,18 @@ header {
       height: 60px;
     }
 
-    .play-text {
+    span {
       position: relative;
       top: 6px;
       margin-bottom: -24px;
       font-size: 2em;
     }
   }
+}
+
+.intermission.modal button {
+  height: 60px;
+  padding: 0 12px;
 }
 
 .hidden {

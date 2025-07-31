@@ -7,7 +7,7 @@ const playerBoards = {
   2: document.querySelector('.gameboard.player-2'),
 }
 
-const newGameModalEl = document.querySelector('.new-game-modal')
+const newGameModalEl = document.querySelector('.new-game.modal')
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
@@ -53,7 +53,7 @@ export function updateGameboards(player1, player2) {
   }
 }
 
-export function gameboardDisplayControl(bool, player) {
+export function gameboardDisplayControl(bool, player, message) {
   let elToHide = gameboardsEl;
   if (player === 1) elToHide = playerBoards[1];
   if (player === 2) elToHide = playerBoards[2];
