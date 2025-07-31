@@ -70,7 +70,14 @@ header {
     aspect-ratio: 1/1;
     height: 100%;
     border: 2px solid rgba(18, 199, 18, 0.822);
-    box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
+  }
+}
+
+.gameboards.hidden {
+  opacity: 40%;
+
+  .gameboard {
+    box-shadow: none;
   }
 }
 
@@ -97,18 +104,33 @@ header {
     height: 4vw;
     max-height: 60px;
     aspect-ratio: 1/1;
+  }
+
+  &.ship {
+    background-color: grey;
+    box-shadow: 0px 0px 0px 2px rgba(128, 128, 128, 0.596);
+  }
+}
+
+.gameboard:not(.hidden) {
+  box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
+
+  .cell {
     box-shadow: 0px 0px 0px 2px rgba(18, 199, 18, 0.2), 0px 0px 12px 0px rgba(18, 199, 18, 0.4);
     cursor: pointer;
 
-    &.ship {
-      background-color: grey;
-      box-shadow: 0px 0px 0px 2px rgba(128, 128, 128, 0.596);
+    &:hover {
+      border: 2px solid rgba(18, 199, 18, 1);
     }
   }
 }
 
-.cell:hover {
-  border: 2px solid rgba(18, 199, 18, 1);
+.gameboard.hidden {
+  opacity: 40%;
+
+  .cell {
+    box-shadow: 0px 0px 0px 2px rgba(18, 199, 18, 0.2), 0px 0px 6px 0px rgba(18, 199, 18, 0.4);
+  }
 }
 
 .row:nth-child(even) {
@@ -185,9 +207,4 @@ header {
 .intermission.modal button {
   height: 60px;
   padding: 0 12px;
-}
-
-.hidden {
-  visibility: hidden;
-  display: none;
 }
