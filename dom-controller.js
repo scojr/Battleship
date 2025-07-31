@@ -1,5 +1,11 @@
 import { startGame } from "./game-logic.js";
 
+const devButton = document.querySelector('.dev-button');
+
+export function devButtonOnClick(callback) {
+  devButton.onclick = callback;
+}
+
 const gameboardsEl = document.querySelector('.gameboards');
 
 const playerBoards = {
@@ -8,18 +14,21 @@ const playerBoards = {
 }
 
 const newGameModalEl = document.querySelector('.new-game.modal')
+const intermissionModalEl = document.querySelector('.intermission.modal');
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
   'playFriend': document.querySelector('.play-friend'),
 }
 
+const headerMessage = document.querySelector('.header-message');
+
 newGameButtonEls.playCpu.addEventListener('click', () => {
-  startGame();
+  startGame(true);
   closeNewGameModal();
 })
 newGameButtonEls.playFriend.addEventListener('click', () => {
-  startGame();
+  startGame(true);
   closeNewGameModal();
 })
 
@@ -27,9 +36,11 @@ function closeNewGameModal() {
   newGameModalEl.style.visibility = 'hidden';
 }
 
-export function updateGameboards(player1, player2) {
+export function updateGameboards(players) {
   playerBoards['1'].innerHTML = '';
   playerBoards['2'].innerHTML = '';
+  const player1 = players['1'];
+  const player2 = players['2'];
 
   insertGrid(player1, playerBoards['1']);
   insertGrid(player2, playerBoards['2']);
@@ -53,10 +64,26 @@ export function updateGameboards(player1, player2) {
   }
 }
 
-export function gameboardDisplayControl(bool, player) {
-  let elToHide = gameboardsEl;
+export function hideGameboard(player) {
+  playerBoards[1].classList.remove('hidden')
+  playerBoards[2].classList.remove('hidden')
+  gameboardsEl.classList.remove('hidden')
+
+  if (!player) return;
+  let elToHide;
   if (player === 1) elToHide = playerBoards[1];
   if (player === 2) elToHide = playerBoards[2];
-  if (bool) elToHide.classList.remove('hidden');
-  else elToHide.classList.add('hidden');
+  if (player === 3) elToHide = gameboardsEl;
+  elToHide.classList.add('hidden');
+}
+
+export function showIntermission(message) {
+  const messageEl = intermissionModalEl.querySelector('.intermission-message');
+  messageEl.textContent = message;
+  hideGameboard(3);
+  intermissionModalEl.style.visibility = 'visible';
+}
+
+export function newHeaderMessage(string) {
+  headerMessage.textContent = string;
 }

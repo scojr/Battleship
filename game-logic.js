@@ -1,19 +1,31 @@
 import { Player } from "./objects.js";
-import { updateGameboards } from "./dom-controller.js";
+import { devButtonOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage } from "./dom-controller.js";
 
-let player1;
-let player2;
-const players = [player1, player2]
+const players = { 1: null, 2: null }
 
 
 // player1.autoPlaceShips(0);
 // player2.autoPlaceShips(1);
 startGame();
+hideGameboard(3);
 
-function startGame() {
-  player1 = new Player();
-  player2 = new Player(true);
-  updateGameboards(player1, player2);
+function startGame(playerClicked) {
+  players['1'] = new Player();
+  players['2'] = new Player(true);
+  console.log()
+  updateGameboards(players);
+  if (playerClicked) promptForShips()
+}
+
+function promptForShips() {
+  newHeaderMessage('Player 1, place your ships.')
+  hideGameboard(2);
+  devButtonOnClick(() => {
+    players['1'].autoPlaceShips(0);
+    updateGameboards(players);
+    console.log(players);
+    console.log(players['1'].gameboard)
+  });
 }
 
 function newRound() {
@@ -22,9 +34,9 @@ function newRound() {
 
 function printGrids() {
   console.log('\n\nPlayer 1')
-  player1.gameboard.printGrid();
+  players['1'].gameboard.printGrid();
   console.log('\n\nPlayer 2')
-  player2.gameboard.printGrid();
+  players['2'].gameboard.printGrid();
 }
 
 export { startGame, newRound }
