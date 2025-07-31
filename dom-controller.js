@@ -53,8 +53,6 @@ export function updateGameboards(player1, player2) {
   }
 }
 
-
-
 export function gameboardDisplayControl(bool, player) {
   let elToHide = gameboardsEl;
   if (player === 1) elToHide = playerBoards[1];
@@ -62,5 +60,3 @@ export function gameboardDisplayControl(bool, player) {
   if (bool) elToHide.classList.remove('hidden');
   else elToHide.classList.add('hidden');
 }
-
-gameboardDisplayControl(false)
