@@ -1,11 +1,8 @@
 import { Player } from "./objects.js";
-import { devButtonOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage } from "./dom-controller.js";
+import { devButtonOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
 
 const players = { 1: null, 2: null }
 
-
-// player1.autoPlaceShips(0);
-// player2.autoPlaceShips(1);
 startGame();
 hideGameboard(3);
 
@@ -20,7 +17,11 @@ function startGame(playerClicked) {
 function promptForShips() {
   newHeaderMessage('Player 1, place your ships.')
   hideGameboard(2);
+  continueButtonControls.show();
+  continueButtonControls.disable();
   devButtonOnClick(() => {
+    continueButtonControls.enable();
+    continueButtonControls.onClick(() => console.log('test'));
     players['1'].autoPlaceShips(0);
     updateGameboards(players);
     console.log(players);

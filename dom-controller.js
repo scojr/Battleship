@@ -21,6 +21,38 @@ const newGameButtonEls = {
   'playFriend': document.querySelector('.play-friend'),
 }
 
+const continueButtonEl = document.querySelector('button.continue');
+
+function continueButtonOnClick(callback) {
+  continueButtonEl.onclick = callback;
+}
+function continueButtonMessage(message) {
+  continueButtonEl.textContent = message;
+}
+function disableContinueButton() {
+  continueButtonEl.classList.add('inactive');
+}
+function enableContinueButton() {
+  continueButtonEl.classList.remove('inactive');
+}
+
+function hideContinueButton() {
+  continueButtonEl.style.visibility = 'hidden';
+}
+
+function showContinueButton() {
+  continueButtonEl.style.visibility = 'visible';
+}
+
+export const continueButtonControls = {
+  onClick: continueButtonOnClick,
+  message: continueButtonMessage,
+  disable: disableContinueButton,
+  enable: enableContinueButton,
+  hide: hideContinueButton,
+  show: showContinueButton,
+}
+
 const headerMessage = document.querySelector('.header-message');
 
 newGameButtonEls.playCpu.addEventListener('click', () => {
