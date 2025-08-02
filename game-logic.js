@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { devButtonOnClick, highlightCell, cellsOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -51,10 +51,9 @@ function promptForShips(player) {
 }
 
 function newRound() {
+  let clickedCell;
   continueButtonControls.message('Attack')
   continueButtonControls.disable();
-  console.log(`Player ${activePlayer}'s turn`);
-  let clickedCell;
   newHeaderMessage(`Player ${activePlayer}, attack your opponent!`)
   hideGameboard(parseInt(activePlayer));
   cellsOnClick((e) => {
@@ -73,8 +72,8 @@ function newRound() {
         newRound()
       });
     });
-    continueButtonControls.enable();
     highlightCell(e.target);
+    continueButtonControls.enable();
   })
 }
 

@@ -1,11 +1,5 @@
 import { startGame } from "./game-logic.js";
 
-const devButton = document.querySelector('.dev-button');
-
-export function devButtonOnClick(callback) {
-  devButton.onclick = callback;
-}
-
 const gameboardsEl = document.querySelector('.gameboards');
 
 const playerBoards = {
