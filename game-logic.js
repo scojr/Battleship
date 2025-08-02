@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showIntermission, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -44,6 +44,7 @@ function promptPlayersForShips() {
 }
 
 function promptForShips(player) {
+  shipDrawerVisibility(true);
   newHeaderMessage(`Player ${activePlayer}, place your ships.`)
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();

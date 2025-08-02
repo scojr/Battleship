@@ -17,6 +17,7 @@ export function cellsOnClick(callback) {
 
 const newGameModalEl = document.querySelector('.new-game.modal')
 const intermissionModalEl = document.querySelector('.intermission.modal');
+const shipDrawerModal = document.querySelector('.ship-drawer.modal');
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
@@ -65,6 +66,12 @@ newGameButtonEls.playFriend.addEventListener('click', () => {
   startGame(true);
   closeNewGameModal();
 })
+
+export function shipDrawerVisibility(bool) {
+  let value = 'visible'
+  if (!bool) value = 'hidden';
+  shipDrawerModal.style.visibility = value;
+}
 
 function closeNewGameModal() {
   newGameModalEl.style.visibility = 'hidden';
