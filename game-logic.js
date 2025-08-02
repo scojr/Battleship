@@ -6,12 +6,17 @@ let activePlayer = '1';
 let inactivePlayer = '2';
 
 function togglePlayerTurn() {
-  if (activePlayer = '1') {
+  if (activePlayer === '1') {
+    console.log('test')
     activePlayer = '2'
     inactivePlayer = '1'
-  } else {
+    return
+  }
+  if (activePlayer === '2') {
+    console.log('test2')
     activePlayer = '1'
     inactivePlayer = '2'
+    return
   }
 }
 
@@ -34,7 +39,6 @@ function promptPlayersForShips() {
   continueButtonControls.enable();
   continueButtonControls.show();
   continueButtonControls.onClick(() => {
-    continueButtonControls.disable();
     newRound();
   });
 }
@@ -44,24 +48,33 @@ function promptForShips(player) {
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();
   continueButtonControls.disable();
-
 }
 
 function newRound() {
+  continueButtonControls.message('Attack')
+  continueButtonControls.disable();
+  console.log(`Player ${activePlayer}'s turn`);
   let clickedCell;
   newHeaderMessage(`Player ${activePlayer}, attack your opponent!`)
   hideGameboard(parseInt(activePlayer));
   cellsOnClick((e) => {
     clickedCell = e.target;
     continueButtonControls.onClick(() => {
-      players[inactivePlayer].gameboard.recieveAttack(clickedCell.dataset.x, clickedCell.dataset.y);
+      const attack = players[inactivePlayer].gameboard.recieveAttack
+        (clickedCell.dataset.x, clickedCell.dataset.y);
+      let message = `You missed! Player ${inactivePlayer} is up next.`;
+      if (attack) message = `You hit! Player ${inactivePlayer} is up next.`;;
       updateGameboards(players);
-      continueButtonControls.hide();
-      continueButtonControls.disable();
+      newHeaderMessage(message);
+      continueButtonControls.enable();
+      continueButtonControls.message('Continue')
+      togglePlayerTurn();
+      continueButtonControls.onClick(() => {
+        newRound()
+      });
     });
-    highlightCell(e.target);
     continueButtonControls.enable();
-
+    highlightCell(e.target);
   })
 }
 

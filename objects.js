@@ -17,7 +17,7 @@ class Gameboard {
     this.grid = createGrid();
   }
   ships = [];
-  missedAttacks = [];
+  recievedAttacks = [];
   placeShip(x, y, length, rotate = false) {
     if (x < 0 || y < 0) return;
     let axis;
@@ -38,10 +38,16 @@ class Gameboard {
   }
   recieveAttack(x, y) {
     const ship = this.grid[y][x];
-    if (ship) ship.hit();
-    else {
-      this.missedAttacks.push({ x, y });
-      return false
+    let isHit;
+    if (ship) {
+      ship.hit();
+      isHit = true;
+      this.recievedAttacks.push({ x, y, isHit });
+      return isHit;
+    } else {
+      isHit = false;
+      this.recievedAttacks.push({ x, y, isHit });
+      return isHit
     };
   }
   shipsSunk() {

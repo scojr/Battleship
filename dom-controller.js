@@ -103,15 +103,15 @@ export function updateGameboards(players) {
         cellEl.dataset.x = cellIndex;
         cellEl.dataset.y = rowIndex;
         cellEl.classList.add('cell');
-        player.gameboard.missedAttacks.forEach((miss) => {
+        player.gameboard.recievedAttacks.forEach((miss) => {
           if (parseInt(miss.x) == cellIndex && parseInt(miss.y) == rowIndex) {
-            cellEl.classList.add('miss');
+            if (miss.isHit) cellEl.classList.add('hit');
+            else cellEl.classList.add('miss');
             console.log(miss)
           }
         })
         if (cell) {
           cellEl.classList.add('ship')
-          if (cell.hits > 0) cellEl.classList.add('hit');
         }
         cellEls.push(cellEl);
         rowEl.append(cellEl);
@@ -134,9 +134,11 @@ export function hideGameboard(player) {
   elToHide.classList.add('hidden');
 }
 
-export function showIntermission(message) {
-  const messageEl = intermissionModalEl.querySelector('.intermission-message');
-  messageEl.textContent = message;
+export function showIntermission(topMessage, bottomMessage) {
+  const messageTopEl = intermissionModalEl.querySelector('.intermission-message-top');
+  const messageBottomEl = intermissionModalEl.querySelector('.intermission-message-bottom');
+  messageTopEl.textContent = topMessage;
+  messageBottomEl.textContent = bottomMessage;
   hideGameboard(3);
   intermissionModalEl.style.visibility = 'visible';
 }
