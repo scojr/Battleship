@@ -100,13 +100,19 @@ export function updateGameboards(players) {
       rowEl.classList.add('row', 'flex');
       row.forEach((cell, cellIndex) => {
         const cellEl = document.createElement('div');
+        cellEl.dataset.x = cellIndex;
+        cellEl.dataset.y = rowIndex;
         cellEl.classList.add('cell');
+        player.gameboard.missedAttacks.forEach((miss) => {
+          if (parseInt(miss.x) == cellIndex && parseInt(miss.y) == rowIndex) {
+            cellEl.classList.add('miss');
+            console.log(miss)
+          }
+        })
         if (cell) {
           cellEl.classList.add('ship')
-          if (cell.hits > 0) cellEl.classList.add('ship hit')
+          if (cell.hits > 0) cellEl.classList.add('hit');
         }
-        cellEl.dataset.y = rowIndex;
-        cellEl.dataset.x = cellIndex;
         cellEls.push(cellEl);
         rowEl.append(cellEl);
       })

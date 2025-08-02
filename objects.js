@@ -37,7 +37,7 @@ class Gameboard {
     this.ships.push(ship);
   }
   recieveAttack(x, y) {
-    const ship = this.grid[x][y];
+    const ship = this.grid[y][x];
     if (ship) ship.hit();
     else {
       this.missedAttacks.push({ x, y });
