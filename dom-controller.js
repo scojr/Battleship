@@ -13,6 +13,14 @@ const playerBoards = {
   2: document.querySelector('.gameboard.player-2'),
 }
 
+let cellEls = [];
+
+export function cellsOnClick(callback) {
+  cellEls.forEach((cell) => {
+    cell.onclick = callback;
+  })
+}
+
 const newGameModalEl = document.querySelector('.new-game.modal')
 const intermissionModalEl = document.querySelector('.intermission.modal');
 
@@ -68,7 +76,15 @@ function closeNewGameModal() {
   newGameModalEl.style.visibility = 'hidden';
 }
 
+let highlightedCell;
+export function highlightCell(cellEl) {
+  if (highlightedCell) highlightedCell.classList.remove('targeted');
+  cellEl.classList.add('targeted');
+  highlightedCell = cellEl;
+}
+
 export function updateGameboards(players) {
+  cellEls = [];
   playerBoards['1'].innerHTML = '';
   playerBoards['2'].innerHTML = '';
   const player1 = players['1'];
@@ -79,16 +95,19 @@ export function updateGameboards(players) {
 
   function insertGrid(player, gameboardEl) {
     const grid = document.createElement('div');
-    player.gameboard.grid.forEach((row) => {
+    player.gameboard.grid.forEach((row, rowIndex) => {
       const rowEl = document.createElement('div');
       rowEl.classList.add('row', 'flex');
-      row.forEach((cell) => {
+      row.forEach((cell, cellIndex) => {
         const cellEl = document.createElement('div');
         cellEl.classList.add('cell');
         if (cell) {
           cellEl.classList.add('ship')
           if (cell.hits > 0) cellEl.classList.add('ship hit')
         }
+        cellEl.dataset.y = rowIndex;
+        cellEl.dataset.x = cellIndex;
+        cellEls.push(cellEl);
         rowEl.append(cellEl);
       })
       gameboardEl.append(rowEl);

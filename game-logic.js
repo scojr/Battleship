@@ -1,7 +1,19 @@
 import { Player } from "./objects.js";
-import { devButtonOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { devButtonOnClick, highlightCell, cellsOnClick, updateGameboards, showIntermission, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
 
 const players = { 1: null, 2: null }
+let activePlayer = '1';
+let inactivePlayer = '2';
+
+function togglePlayerTurn() {
+  if (activePlayer = '1') {
+    activePlayer = '2'
+    inactivePlayer = '1'
+  } else {
+    activePlayer = '1'
+    inactivePlayer = '2'
+  }
+}
 
 startGame();
 hideGameboard(3);
@@ -11,26 +23,35 @@ function startGame(playerClicked) {
   players['2'] = new Player(true);
   console.log()
   updateGameboards(players);
-  if (playerClicked) promptForShips()
+  if (playerClicked) promptPlayersForShips();
 }
 
-function promptForShips() {
-  newHeaderMessage('Player 1, place your ships.')
-  hideGameboard(2);
+function promptPlayersForShips() {
+  promptForShips(players['1']);
+  promptForShips(players['2']);
+  players['1'].autoPlaceShips(0);
+  players['2'].autoPlaceShips(1);
+  updateGameboards(players);
+  continueButtonControls.enable();
   continueButtonControls.show();
-  continueButtonControls.disable();
-  devButtonOnClick(() => {
-    continueButtonControls.enable();
-    continueButtonControls.onClick(() => console.log('test'));
-    players['1'].autoPlaceShips(0);
-    updateGameboards(players);
-    console.log(players);
-    console.log(players['1'].gameboard)
+  continueButtonControls.onClick(() => {
+    continueButtonControls.disable();
+    newRound();
   });
 }
 
-function newRound() {
+function promptForShips(player) {
+  newHeaderMessage(`Player ${activePlayer}, place your ships.`)
+  hideGameboard(parseInt(inactivePlayer));
+  continueButtonControls.show();
+  continueButtonControls.disable();
 
+}
+
+function newRound() {
+  newHeaderMessage(`Player ${activePlayer}, attack your opponent!`)
+  hideGameboard(parseInt(activePlayer));
+  cellsOnClick((e) => highlightCell(e.target))
 }
 
 function printGrids() {
