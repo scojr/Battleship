@@ -1,4 +1,5 @@
 import { startGame } from "./game-logic.js";
+import "./drag-drop.js";
 
 const gameboardsEl = document.querySelector('.gameboards');
 
