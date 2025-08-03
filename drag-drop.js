@@ -5,6 +5,7 @@ const shipEls = shipDrawerEl.querySelectorAll('.player-ship');
 const visualEl = document.querySelector('.drag-drop-visual');
 let currentShip;
 let hoveredCell;
+let previousCells;
 
 
 shipEls.forEach((ship) => {
@@ -24,15 +25,19 @@ function initiateDragging(event, ship) {
 
 function drag(event) {
   const elementFromPoint = document.elementFromPoint(event.pageX, event.pageY);
-  cellHovered(elementFromPoint);
+  if (elementFromPoint.classList.contains('cell') && elementFromPoint !== hoveredCell) {
+    hoveredCell = elementFromPoint;
+    console.log(testCellValidity());
+    console.log('test')
+  }
   moveVisualElToCursor(event);
-  console.log(testCellValidity());
 }
 
 function endDrag() {
   document.onmousedown = null;
   document.onmousemove = null;
   document.onmouseup = null;
+  styleCells();
   newGrabVisual(false);
   currentShip.style.visibility = 'visible';
   currentShip = null;
@@ -54,12 +59,6 @@ function moveVisualElToCursor(event) {
   visualEl.style.setProperty('--mouse-y', `${event.clientY - visualEl.offsetHeight / 2}px`)
 }
 
-function cellHovered(element) {
-  if (element.classList.contains('cell') && element !== hoveredCell) {
-    hoveredCell = element;
-  }
-}
-
 function testCellValidity() {
   if (!hoveredCell) return;
   let isValid = true;
@@ -67,7 +66,26 @@ function testCellValidity() {
   for (let cell of cells) {
     if (cell.classList.contains('ship')) isValid = false;
   }
+  styleCells(cells, isValid);
+  previousCells = cells;
   return isValid;
+}
+
+function styleCells(cells, bool) {
+  if (previousCells) {
+    previousCells.forEach((cell) => {
+      cell.classList.remove('invalid');
+      cell.classList.remove('valid');
+      cell.classList.remove('hovered');
+    })
+  }
+  if (cells) {
+    cells.forEach((cell) => {
+      cell.classList.add('hovered');
+      if (bool) cell.classList.add('valid');
+      else cell.classList.add('invalid');
+    })
+  }
 }
 
 function getCellsToTest() {
@@ -84,13 +102,15 @@ function getCellsToTest() {
     lastCellToTest += difference;
   }
   if (lastCellToTest > 10) {
-    const difference = 10 - firstCellToTest;
+    const difference = lastCellToTest - 10;
     firstCellToTest -= difference;
     lastCellToTest -= difference;
   }
   const cellCoords = [];
   for (let i = firstCellToTest; i <= lastCellToTest; i++) {
+    console.log(i, inactiveAxis)
     cellCoords.push(getCellEl(i, inactiveAxis))
   }
+  console.log(cellCoords);
   return cellCoords;
 }
