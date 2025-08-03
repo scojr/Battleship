@@ -99,12 +99,12 @@ export function updateGameboards(players) {
     const grid = document.createElement('div');
     player.gameboard.grid.forEach((row, rowIndex) => {
       const rowEl = document.createElement('div');
-      rowEl.classList.add('row', 'flex');
+      rowEl.classList.add('row', 'flex', `row-${rowIndex}`);
       row.forEach((cell, cellIndex) => {
         const cellEl = document.createElement('div');
         cellEl.dataset.x = cellIndex;
         cellEl.dataset.y = rowIndex;
-        cellEl.classList.add('cell');
+        cellEl.classList.add('cell', `cell-${cellIndex}`);
         player.gameboard.recievedAttacks.forEach((miss) => {
           if (parseInt(miss.x) == cellIndex && parseInt(miss.y) == rowIndex) {
             if (miss.isHit) cellEl.classList.add('hit');
@@ -147,4 +147,10 @@ export function showIntermission(topMessage, bottomMessage) {
 
 export function newHeaderMessage(string) {
   headerMessage.textContent = string;
+}
+
+export function getCellEl(x, y) {
+  const row = document.querySelector(`.row-${y}`);
+  const cell = row.querySelector(`.cell-${x}`);
+  return cell;
 }
