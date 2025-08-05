@@ -1,4 +1,4 @@
-import { getCellEl } from "./dom-controller.js";
+import { getCellEl, updateGameboards } from "./dom-controller.js";
 
 const shipDrawerEl = document.querySelector('.ship-drawer.modal');
 const shipEls = shipDrawerEl.querySelectorAll('.player-ship');
@@ -6,14 +6,20 @@ const visualEl = document.querySelector('.drag-drop-visual');
 let currentShip;
 let hoveredCell;
 let previousCells;
+let validCellParams;
+let isValid;
+let players;
 
+export function getPlayersForShipPlacement(playersObject) {
+  players = playersObject;
+}
 
 shipEls.forEach((ship) => {
   ship.addEventListener('mousedown', (e) => initiateDragging(e, ship));
 })
 
-
 function initiateDragging(event, ship) {
+  isValid = false;
   event.preventDefault();
   event.stopPropagation();
   currentShip = ship;
@@ -27,8 +33,7 @@ function drag(event) {
   const elementFromPoint = document.elementFromPoint(event.pageX, event.pageY);
   if (elementFromPoint.classList.contains('cell') && elementFromPoint !== hoveredCell) {
     hoveredCell = elementFromPoint;
-    console.log(testCellValidity());
-    console.log('test')
+    isValid = testCellValidity();
   }
   moveVisualElToCursor(event);
 }
@@ -37,6 +42,10 @@ function endDrag() {
   document.onmousedown = null;
   document.onmousemove = null;
   document.onmouseup = null;
+  if (isValid) console.log(validCellParams);
+  console.log(players['1']);
+  if (isValid) players['1'].gameboard.placeShip(...validCellParams);
+  updateGameboards(players)
   styleCells();
   newGrabVisual(false);
   currentShip.style.visibility = 'visible';
@@ -108,9 +117,8 @@ function getCellsToTest() {
   }
   const cellCoords = [];
   for (let i = firstCellToTest; i <= lastCellToTest; i++) {
-    console.log(i, inactiveAxis)
     cellCoords.push(getCellEl(i, inactiveAxis))
   }
-  console.log(cellCoords);
+  validCellParams = [firstCellToTest, inactiveAxis, shipLength];
   return cellCoords;
 }

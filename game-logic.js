@@ -1,5 +1,6 @@
 import { Player } from "./objects.js";
 import { highlightCell, cellsOnClick, updateGameboards, showIntermission, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { getPlayersForShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -27,16 +28,14 @@ function startGame(playerClicked) {
   players['1'] = new Player();
   players['2'] = new Player(true);
   updateGameboards(players);
-  if (playerClicked) promptPlayersForShips();
+  getPlayersForShipPlacement(players);
+  if (playerClicked) promptForShip(players['1']);
 }
 
-function promptPlayersForShips() {
+function promptForShip(player) {
   promptForShips(players['1']);
-  promptForShips(players['2']);
-  players['1'].autoPlaceShips(0);
-  players['2'].autoPlaceShips(1);
   updateGameboards(players);
-  continueButtonControls.enable();
+  continueButtonControls.disable();
   continueButtonControls.show();
   continueButtonControls.onClick(() => {
     newRound();
