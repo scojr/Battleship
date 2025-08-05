@@ -3,28 +3,93 @@ import { getCellEl, updateGameboards } from "./dom-controller.js";
 const shipDrawerEl = document.querySelector('.ship-drawer.modal');
 const shipEls = shipDrawerEl.querySelectorAll('.player-ship');
 const visualEl = document.querySelector('.drag-drop-visual');
-let currentShip;
-let hoveredCell;
-let previousCells;
-let validCellParams;
-let isValid;
+
 let players;
+let currentShip;
+let previousCells;
+let hoveredCell;
+let isValid;
+let validCellParams;
+
+class ShipDragging {
+  constructor(player, el, fromDrawer = false) {
+    this.player = player;
+    this.el = el;
+    this.fromDrawer = fromDrawer;
+    if (fromDrawer) {
+      this.length = parseInt(el.dataset.length);
+    }
+    if (!fromDrawer) {
+      this.cellX = parseInt(el.dataset.x);
+      this.cellY = parseInt(el.dataset.y);
+      this.object = getShipObject(player, this.cellX, this.cellY)
+      this.rotation = this.object.rotation;
+      this.startX = this.object.start[0];
+      this.startY = this.object.start[1];
+      this.length = parseInt(this.object.length);
+    }
+    function getShipObject(player, x, y) {
+      const object = player.gameboard.getCell(x, y);
+      return object
+    }
+
+  }
+
+  getCells() {
+    if (this.fromDrawer) return;
+    const cells = [];
+    for (let i = 0; i < this.length; i++) {
+      cells.push(getCellEl(this.startX + i, this.startY));
+    }
+    return cells;
+  }
+  hideShip() {
+    if (this.fromDrawer) return;
+    const cells = this.getCells();
+    cells.forEach((cell) => {
+      cell.classList.add('hidden');
+    })
+  }
+  showShip() {
+    if (this.fromDrawer) return;
+    const cells = this.getCells();
+    cells.forEach((cell) => {
+      cell.classList.remove('hidden');
+    })
+  }
+}
 
 export function getPlayersForShipPlacement(playersObject) {
   players = playersObject;
 }
 
-shipEls.forEach((ship) => {
-  ship.addEventListener('mousedown', (e) => initiateDragging(e, ship));
-})
+export function shipDragHandler(ship) {
+  ship.addEventListener('mousedown', (e) => {
+    currentShip = new ShipDragging(players['1'], ship);
+    newGrabVisual(currentShip.length, e);
+    initiateDragging(e, ship);
+  });
+}
 
-function initiateDragging(event, ship) {
-  isValid = false;
+function drawerDragHandler(ship) {
+  ship.addEventListener('mousedown', (e) => {
+    currentShip = new ShipDragging(players['1'], ship, true);
+    newGrabVisual(currentShip.length, e);
+    initiateDragging(e, ship);
+  });
+}
+
+shipEls.forEach((ship) => drawerDragHandler(ship));
+
+
+
+function initiateDragging(event) {
   event.preventDefault();
   event.stopPropagation();
-  currentShip = ship;
-  currentShip.style.visibility = 'hidden';
-  newGrabVisual(currentShip.dataset.length, event);
+  isValid = false;
+  currentShip.hideShip();
+  // currentShip.el.style.visibility = 'hidden';
+  // newGrabVisual(currentShip.el.dataset.length, event);
   document.onmousemove = drag;
   document.onmouseup = endDrag;
 }
@@ -44,11 +109,14 @@ function endDrag() {
   document.onmouseup = null;
   if (isValid) console.log(validCellParams);
   console.log(players['1']);
-  if (isValid) players['1'].gameboard.placeShip(...validCellParams);
+  if (isValid) {
+    players['1'].gameboard.placeShip(...validCellParams)
+  } else {
+    // currentShip.el.style.visibility = 'visible';
+  }
   updateGameboards(players)
   styleCells();
   newGrabVisual(false);
-  currentShip.style.visibility = 'visible';
   currentShip = null;
 }
 
@@ -102,7 +170,7 @@ function getCellsToTest() {
   const hoveredCellY = parseInt(hoveredCell.dataset.y);
   let activeAxis = hoveredCellX;
   let inactiveAxis = hoveredCellY;
-  const shipLength = parseInt(currentShip.dataset.length);
+  const shipLength = parseInt(currentShip.length);
   let firstCellToTest = Math.round((parseInt(activeAxis) - parseInt(shipLength) / 2));
   let lastCellToTest = Math.round((parseInt(activeAxis) + parseInt(shipLength) / 2) - 1);
   if (firstCellToTest < 0) {

@@ -1,5 +1,5 @@
 import { startGame } from "./game-logic.js";
-import "./drag-drop.js";
+import { shipDragHandler } from "./drag-drop.js";
 
 const gameboardsEl = document.querySelector('.gameboards');
 
@@ -96,7 +96,6 @@ export function updateGameboards(players) {
   insertGrid(player2, playerBoards['2']);
 
   function insertGrid(player, gameboardEl) {
-    const grid = document.createElement('div');
     player.gameboard.grid.forEach((row, rowIndex) => {
       const rowEl = document.createElement('div');
       rowEl.classList.add('row', 'flex', `row-${rowIndex}`);
@@ -114,6 +113,7 @@ export function updateGameboards(players) {
         })
         if (cell) {
           cellEl.classList.add('ship')
+          shipDragHandler(cellEl);
         }
         cellEls.push(cellEl);
         rowEl.append(cellEl);
