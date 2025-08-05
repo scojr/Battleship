@@ -1,6 +1,8 @@
 class Ship {
-  constructor(length) {
+  constructor(length, start, rotation = false) {
     this.length = length;
+    this.start = start;
+    this.rotation = rotation;
   }
   hits = 0;
   hit() {
@@ -30,7 +32,7 @@ class Gameboard {
       if (this.grid[cell.y][cell.x]) return false;
       else shipCoords.push(cell);
     }
-    let ship = new Ship(length);
+    let ship = new Ship(length, [x, y]);
     shipCoords.forEach((coord) => {
       this.grid[coord.y][coord.x] = ship;
     })
