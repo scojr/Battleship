@@ -1,4 +1,4 @@
-class Ship {
+export class Ship {
   constructor(length, start, rotation = false) {
     this.length = length;
     this.start = start;
@@ -14,13 +14,14 @@ class Ship {
   }
 }
 
-class Gameboard {
+export class Gameboard {
   constructor() {
     this.grid = createGrid();
   }
   ships = [];
   recievedAttacks = [];
   placeShip(x, y, length, rotate = false) {
+    console.log(this.ships);
     if (x < 0 || y < 0) return;
     let axis;
     rotate ? axis = y : axis = x;
@@ -37,6 +38,27 @@ class Gameboard {
       this.grid[coord.y][coord.x] = ship;
     })
     this.ships.push(ship);
+  }
+  removeShip(x, y) {
+    shipObject = this.getCell(x, y);
+    if (!shipObject) return false;
+    const shipLength = shipObject.length;
+    const shipRotation = shipObject.rotation;
+    const shipStart = {
+      x: shipObject.start[0],
+      y: shipObject.start[1],
+    }
+    let activeAxis = shipStart.x;
+    let inactiveAxis = shipStart.y;
+    if (shipRotation) {
+      activeAxis = shipStart.y;
+      inactiveAxis = shipStart.x;
+    }
+    for (let i = activeAxis; i < activeAxis + shipLength; i++) {
+      let cell;
+      shipRotation ? cell = { x, y: y + i } : cell = { x: x + i, y };
+      this.grid[inactiveAxis][activeAxis] = null;
+    }
   }
   recieveAttack(x, y) {
     const ship = this.grid[y][x];
