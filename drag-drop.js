@@ -81,24 +81,27 @@ function drawerDragHandler(ship) {
 
 shipEls.forEach((ship) => drawerDragHandler(ship));
 
-
-
 function initiateDragging(event) {
   event.preventDefault();
   event.stopPropagation();
   isValid = false;
   currentShip.hideShip();
-  // currentShip.el.style.visibility = 'hidden';
-  // newGrabVisual(currentShip.el.dataset.length, event);
+  if (currentShip.fromDrawer) currentShip.el.style.visibility = 'hidden';
   document.onmousemove = drag;
   document.onmouseup = endDrag;
 }
 
 function drag(event) {
   const elementFromPoint = document.elementFromPoint(event.pageX, event.pageY);
-  if (elementFromPoint.classList.contains('cell') && elementFromPoint !== hoveredCell) {
-    hoveredCell = elementFromPoint;
-    isValid = testCellValidity();
+  if (elementFromPoint) {
+    if (elementFromPoint.classList.contains('cell') && elementFromPoint !== hoveredCell) {
+      hoveredCell = elementFromPoint;
+      isValid = testCellValidity();
+    }
+    if (elementFromPoint.classList.contains('gameboards')) {
+      isValid = false;
+      styleCells();
+    }
   }
   moveVisualElToCursor(event);
 }
@@ -107,17 +110,17 @@ function endDrag() {
   document.onmousedown = null;
   document.onmousemove = null;
   document.onmouseup = null;
-  if (isValid) console.log(validCellParams);
-  console.log(players['1']);
   if (isValid) {
+    if (!currentShip.fromDrawer) {
+      players['1'].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
+    }
     players['1'].gameboard.placeShip(...validCellParams)
-  } else {
-    // currentShip.el.style.visibility = 'visible';
+  } else if (currentShip.fromDrawer) {
+    currentShip.el.style.visibility = 'visible';
   }
-  updateGameboards(players)
-  styleCells();
   newGrabVisual(false);
   currentShip = null;
+  updateGameboards(players)
 }
 
 function newGrabVisual(length, event) {
@@ -141,7 +144,7 @@ function testCellValidity() {
   let isValid = true;
   const cells = getCellsToTest();
   for (let cell of cells) {
-    if (cell.classList.contains('ship')) isValid = false;
+    if (cell.classList.contains('ship') && !cell.classList.contains('hidden')) isValid = false;
   }
   styleCells(cells, isValid);
   previousCells = cells;
@@ -183,10 +186,12 @@ function getCellsToTest() {
     firstCellToTest -= difference;
     lastCellToTest -= difference;
   }
-  const cellCoords = [];
+  const cellEls = [];
+  const cellObjects = [];
   for (let i = firstCellToTest; i <= lastCellToTest; i++) {
-    cellCoords.push(getCellEl(i, inactiveAxis))
+    cellEls.push(getCellEl(i, inactiveAxis))
+    cellObjects.push(players['1'].gameboard.getCell(i, inactiveAxis))
   }
   validCellParams = [firstCellToTest, inactiveAxis, shipLength];
-  return cellCoords;
+  return cellEls;
 }

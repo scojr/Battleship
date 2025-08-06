@@ -21,11 +21,10 @@ export class Gameboard {
   ships = [];
   recievedAttacks = [];
   placeShip(x, y, length, rotate = false) {
-    console.log(this.ships);
     if (x < 0 || y < 0) return;
     let axis;
     rotate ? axis = y : axis = x;
-    if (axis + length > 10) return;
+    if (axis + length > 11) return;
     const shipCoords = [];
     for (let i = 0; i < length; i++) {
       let cell;
@@ -40,7 +39,7 @@ export class Gameboard {
     this.ships.push(ship);
   }
   removeShip(x, y) {
-    shipObject = this.getCell(x, y);
+    const shipObject = this.getCell(x, y);
     if (!shipObject) return false;
     const shipLength = shipObject.length;
     const shipRotation = shipObject.rotation;
@@ -55,10 +54,9 @@ export class Gameboard {
       inactiveAxis = shipStart.x;
     }
     for (let i = activeAxis; i < activeAxis + shipLength; i++) {
-      let cell;
-      shipRotation ? cell = { x, y: y + i } : cell = { x: x + i, y };
-      this.grid[inactiveAxis][activeAxis] = null;
+      this.grid[inactiveAxis][i] = null;
     }
+    this.ships.splice(this.ships.indexOf(shipObject), 1);
   }
   recieveAttack(x, y) {
     const ship = this.grid[y][x];
