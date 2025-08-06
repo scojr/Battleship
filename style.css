@@ -310,13 +310,15 @@ button.inactive {
     gap: 12px;
     align-items: center;
     justify-content: center;
-
     margin-top: 70vh;
     margin-right: 50%;
+    box-shadow: 0px 0px 12px 2px rgba(18, 199, 18, 0.6);
+    border: 1px solid rgba(18, 199, 18, 0.6);
   }
 }
 
 .ship-drawer.modal {
+
   .player-ship {
     box-shadow: 0px 0px 4px 2px rgba(18, 199, 18, 0.5);
     background-color: black;
@@ -343,7 +345,7 @@ button.inactive {
       height: 1.5rem;
     }
 
-    &:hover {
+    &:not(.picked):hover {
       scale: 170%;
       z-index: 2;
 
@@ -352,6 +354,17 @@ button.inactive {
       }
     }
   }
+
+  .player-ship.picked {
+    pointer-events: none;
+    transition: scale 0s;
+    box-shadow: 0px 0px 4px 2px rgba(18, 199, 18, 0.3), 0px 0px 6px 4px rgba(18, 199, 18, 0.3) inset, 0px 0px 0px 1px rgba(18, 199, 18, 0.3);
+
+    .ship-cell {
+      opacity: 0%;
+    }
+  }
+
 }
 
 .drag-drop-visual {

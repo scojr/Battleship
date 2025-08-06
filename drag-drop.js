@@ -86,7 +86,7 @@ function initiateDragging(event) {
   event.stopPropagation();
   isValid = false;
   currentShip.hideShip();
-  if (currentShip.fromDrawer) currentShip.el.style.visibility = 'hidden';
+  if (currentShip.fromDrawer) currentShip.el.classList.add('picked');
   document.onmousemove = drag;
   document.onmouseup = endDrag;
 }
@@ -116,7 +116,7 @@ function endDrag() {
     }
     players['1'].gameboard.placeShip(...validCellParams)
   } else if (currentShip.fromDrawer) {
-    currentShip.el.style.visibility = 'visible';
+    currentShip.el.classList.remove('picked');
   }
   newGrabVisual(false);
   currentShip = null;
