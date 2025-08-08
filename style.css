@@ -220,7 +220,7 @@ button.continue {
   pointer-events: none;
 }
 
-.intermission.modal {
+.message.modal {
   visibility: hidden;
 }
 
@@ -278,17 +278,13 @@ button.continue {
   }
 }
 
-.intermission.modal .modal-content {
-  margin-top: 70vh;
-}
-
 button.inactive {
   opacity: 40%;
   cursor: default;
   pointer-events: none;
 }
 
-.intermission.modal button {
+.message.modal button {
   height: 60px;
   padding: 0 12px;
 }

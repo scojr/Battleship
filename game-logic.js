@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showIntermission, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showMessage, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
 import { getPlayersForShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
@@ -33,6 +33,7 @@ function startGame(playerClicked) {
 }
 
 function promptForShip(player) {
+  showMessage('Player 1', 'Place your ships', 'OK')
   promptForShips(players['1']);
   updateGameboards(players);
   continueButtonControls.disable();

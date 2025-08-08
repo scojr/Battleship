@@ -17,13 +17,19 @@ export function cellsOnClick(callback) {
 }
 
 const newGameModalEl = document.querySelector('.new-game.modal')
-const intermissionModalEl = document.querySelector('.intermission.modal');
+const messageModalEl = document.querySelector('.message.modal');
 const shipDrawerModal = document.querySelector('.ship-drawer.modal');
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
   'playFriend': document.querySelector('.play-friend'),
 }
+
+const messageButtonEl = document.querySelector('.message-button');
+
+messageButtonEl.addEventListener('click', (e) => {
+  messageModalEl.style.visibility = 'hidden';
+})
 
 const continueButtonEl = document.querySelector('button.continue');
 
@@ -136,13 +142,16 @@ export function hideGameboard(player) {
   elToHide.classList.add('hidden');
 }
 
-export function showIntermission(topMessage, bottomMessage) {
-  const messageTopEl = intermissionModalEl.querySelector('.intermission-message-top');
-  const messageBottomEl = intermissionModalEl.querySelector('.intermission-message-bottom');
+export function showMessage(topMessage, bottomMessage, buttonMessage) {
+  const messageTopEl = messageModalEl.querySelector('.message-message-top');
+  const messageBottomEl = messageModalEl.querySelector('.message-message-bottom');
+  const buttonSpanEl = messageModalEl.querySelector('.confirm-text.message');
   messageTopEl.textContent = topMessage;
   messageBottomEl.textContent = bottomMessage;
+  messageBottomEl.textContent = bottomMessage;
+  buttonMessage ? buttonSpanEl.textContent = buttonMessage : buttonSpanEl.textContent = 'Confirm';
   hideGameboard(3);
-  intermissionModalEl.style.visibility = 'visible';
+  messageModalEl.style.visibility = 'visible';
 }
 
 export function newHeaderMessage(string) {
