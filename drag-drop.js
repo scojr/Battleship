@@ -10,6 +10,11 @@ let previousCells;
 let hoveredCell;
 let isValid;
 let validCellParams;
+let draggingEnabled = false;
+
+export function allowDragging(bool) {
+  draggingEnabled = bool;
+}
 
 class ShipDragging {
   constructor(player, el, fromDrawer = false) {
@@ -66,7 +71,6 @@ export function getPlayersForShipPlacement(playersObject) {
 export function shipDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
     currentShip = new ShipDragging(players['1'], ship);
-    newGrabVisual(currentShip.length, e);
     initiateDragging(e, ship);
   });
 }
@@ -74,7 +78,6 @@ export function shipDragHandler(ship) {
 function drawerDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
     currentShip = new ShipDragging(players['1'], ship, true);
-    newGrabVisual(currentShip.length, e);
     initiateDragging(e, ship);
   });
 }
@@ -82,6 +85,8 @@ function drawerDragHandler(ship) {
 shipEls.forEach((ship) => drawerDragHandler(ship));
 
 function initiateDragging(event) {
+  if (!draggingEnabled) return;
+  newGrabVisual(currentShip.length, event);
   event.preventDefault();
   event.stopPropagation();
   isValid = false;
