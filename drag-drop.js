@@ -15,7 +15,7 @@ let validCellParams;
 let draggingEnabled = false;
 let shipsPlaced = 0;
 let onShipsPlaced;
-let moved = true;
+let moved = false;
 
 function allowDragging(bool) {
   draggingEnabled = bool;
@@ -34,6 +34,7 @@ class ShipDragging {
     this.fromDrawer = fromDrawer;
     if (fromDrawer) {
       this.length = parseInt(el.dataset.length);
+      this.rotation = false;
     }
     if (!fromDrawer) {
       this.cellX = parseInt(el.dataset.x);
@@ -48,14 +49,15 @@ class ShipDragging {
       const object = player.gameboard.getCell(x, y);
       return object
     }
-
   }
 
   getCells() {
     if (this.fromDrawer) return;
     const cells = [];
     for (let i = 0; i < this.length; i++) {
-      cells.push(getCellEl(activePlayer, this.startX + i, this.startY));
+      let axis = { x: this.startX + i, y: this.startY };
+      if (this.rotation) axis = { x: this.startX, y: this.startY + i };
+      cells.push(getCellEl(activePlayer, axis.x, axis.y));
     }
     return cells;
   }
@@ -132,6 +134,7 @@ function drag(event) {
       styleCells();
     }
   }
+  moved = true;
   moveVisualElToCursor(event);
 }
 
@@ -139,35 +142,31 @@ function endDrag() {
   document.onmousedown = null;
   document.onmousemove = null;
   document.onmouseup = null;
-  if (!testIfMoved()) rotateShip();
+  if (!moved && !currentShip.fromDrawer) {
+    rotateShip();
+  }
   if (isValid) {
-    console.log('is valid move');
     if (!currentShip.fromDrawer) {
       players[activePlayer].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
       shipsPlaced--;
     }
-    players[activePlayer].gameboard.placeShip(...validCellParams)
+    players[activePlayer].gameboard.placeShip(...validCellParams);
     shipsPlaced++;
     if (shipsPlaced >= 5) onShipsPlaced();
   } else if (currentShip.fromDrawer) {
     currentShip.el.classList.remove('picked');
   }
   newGrabVisual(false);
+  moved = false;
   currentShip = null;
-  updateGameboards(players)
-}
-
-function testIfMoved() {
-  console.log(currentShip, validCellParams);
-  const shipStartCoords = [currentShip.startX, currentShip.startY];
-  if (validCellParams[0] === shipStartCoords[0] && validCellParams[1] === shipStartCoords[1]) moved = false;
-  else moved = true;
-  return moved;
+  updateGameboards(players);
 }
 
 function newGrabVisual(length, event) {
   visualEl.innerHTML = '';
+  if (currentShip.rotation) visualEl.classList.remove('flex', 'column');
   if (!length) return;
+  if (currentShip.rotation) visualEl.classList.add('flex', 'column');
   for (let i = 0; i < length; i++) {
     const visualCellEl = document.createElement('div')
     visualCellEl.classList.add('cell');
@@ -215,9 +214,12 @@ function getCellsToTest() {
   const hoveredCellY = parseInt(hoveredCell.dataset.y);
   let activeAxis = hoveredCellX;
   let inactiveAxis = hoveredCellY;
+  currentShip.rotation ? activeAxis = hoveredCellY : activeAxis = hoveredCellX;
+  currentShip.rotation ? inactiveAxis = hoveredCellX : inactiveAxis = hoveredCellY;
   const shipLength = parseInt(currentShip.length);
   let firstCellToTest = Math.round((parseInt(activeAxis) - parseInt(shipLength) / 2));
   let lastCellToTest = Math.round((parseInt(activeAxis) + parseInt(shipLength) / 2) - 1);
+  console.log(hoveredCellX, hoveredCellY);
   if (firstCellToTest < 0) {
     const difference = 0 - firstCellToTest;
     firstCellToTest += difference;
@@ -228,13 +230,16 @@ function getCellsToTest() {
     firstCellToTest -= difference;
     lastCellToTest -= difference;
   }
+  const cellCoords = []
   const cellEls = [];
-  const cellObjects = [];
-  for (let i = firstCellToTest; i <= lastCellToTest; i++) {
-    cellEls.push(getCellEl(activePlayer, i, inactiveAxis))
-    cellObjects.push(players[activePlayer].gameboard.getCell(i, inactiveAxis))
+  for (let i = 0; i < currentShip.length; i++) {
+    let cell = { x: firstCellToTest + i, y: hoveredCellY };
+    if (currentShip.rotation) cell = { x: hoveredCellX, y: firstCellToTest + i };
+    cellCoords.push([cell.x, cell.y]);
+    cellEls.push(getCellEl(activePlayer, cell.x, cell.y))
   }
-  validCellParams = [firstCellToTest, inactiveAxis, shipLength];
+  validCellParams = [cellCoords[0][0], cellCoords[0][1], shipLength, currentShip.rotation];
+  console.log(cellCoords);
   return cellEls;
 }
 
@@ -248,5 +253,7 @@ function shipDrawerVisibility(bool, player) {
 }
 
 function rotateShip() {
-  console.log('Attempting rotation');
+  players[activePlayer].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
+  const placeAttempt = players[activePlayer].gameboard.placeShip(currentShip.startX, currentShip.startY, currentShip.length, !currentShip.rotation);
+  if (!placeAttempt) players[activePlayer].gameboard.placeShip(currentShip.startX, currentShip.startY, currentShip.length, currentShip.rotation);
 }

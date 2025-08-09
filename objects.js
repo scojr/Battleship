@@ -21,6 +21,7 @@ export class Gameboard {
   ships = [];
   recievedAttacks = [];
   placeShip(x, y, length, rotate = false) {
+    console.log({ x, y, length, rotate });
     if (x < 0 || y < 0) return;
     let axis;
     rotate ? axis = y : axis = x;
@@ -32,7 +33,7 @@ export class Gameboard {
       if (this.grid[cell.y][cell.x]) return false;
       else shipCoords.push(cell);
     }
-    let ship = new Ship(length, [x, y]);
+    let ship = new Ship(length, [x, y], rotate);
     shipCoords.forEach((coord) => {
       this.grid[coord.y][coord.x] = ship;
     })
@@ -43,18 +44,12 @@ export class Gameboard {
     if (!shipObject) return false;
     const shipLength = shipObject.length;
     const shipRotation = shipObject.rotation;
-    const shipStart = {
-      x: shipObject.start[0],
-      y: shipObject.start[1],
-    }
-    let activeAxis = shipStart.x;
-    let inactiveAxis = shipStart.y;
-    if (shipRotation) {
-      activeAxis = shipStart.y;
-      inactiveAxis = shipStart.x;
-    }
-    for (let i = activeAxis; i < activeAxis + shipLength; i++) {
-      this.grid[inactiveAxis][i] = null;
+    const shipX = shipObject.start[0];
+    const shipY = shipObject.start[1];
+    for (let i = 0; i < shipLength; i++) {
+      let cell;
+      shipRotation ? cell = { shipX, shipY: shipY + i } : cell = { shipX: shipX + i, shipY };
+      this.grid[cell.shipY][cell.shipX] = null;
     }
     this.ships.splice(this.ships.indexOf(shipObject), 1);
   }
