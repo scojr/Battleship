@@ -11,6 +11,8 @@ let hoveredCell;
 let isValid;
 let validCellParams;
 let draggingEnabled = false;
+let shipsPlaced = 0;
+let onShipsPlaced;
 
 export function allowDragging(bool) {
   draggingEnabled = bool;
@@ -64,8 +66,9 @@ class ShipDragging {
   }
 }
 
-export function getPlayersForShipPlacement(playersObject) {
+export function initiateShipPlacement(playersObject, callback) {
   players = playersObject;
+  onShipsPlaced = callback;
 }
 
 export function shipDragHandler(ship) {
@@ -118,8 +121,12 @@ function endDrag() {
   if (isValid) {
     if (!currentShip.fromDrawer) {
       players['1'].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
+      shipsPlaced--;
     }
     players['1'].gameboard.placeShip(...validCellParams)
+    shipsPlaced++;
+    console.log(onShipsPlaced)
+    if (shipsPlaced >= 5) onShipsPlaced();
   } else if (currentShip.fromDrawer) {
     currentShip.el.classList.remove('picked');
   }

@@ -1,6 +1,6 @@
 import { Player } from "./objects.js";
 import { highlightCell, cellsOnClick, updateGameboards, showMessage, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
-import { getPlayersForShipPlacement, allowDragging } from "./drag-drop.js";
+import { initiateShipPlacement, allowDragging } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -28,7 +28,9 @@ function startGame(playerClicked) {
   players['1'] = new Player();
   players['2'] = new Player(true);
   updateGameboards(players);
-  getPlayersForShipPlacement(players);
+  initiateShipPlacement(players, () => {
+    continueButtonControls.enable();
+  });
   if (playerClicked) promptForShip(players['1']);
   allowDragging(true);
 }
