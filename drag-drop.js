@@ -15,6 +15,7 @@ let validCellParams;
 let draggingEnabled = false;
 let shipsPlaced = 0;
 let onShipsPlaced;
+let moved = true;
 
 function allowDragging(bool) {
   draggingEnabled = bool;
@@ -101,6 +102,7 @@ function drawerDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
     currentShip = new ShipDragging(players[activePlayer], ship, true);
     initiateDragging(e, ship);
+    newGrabVisual(currentShip.length, e);
   });
 }
 
@@ -108,17 +110,17 @@ shipEls.forEach((ship) => drawerDragHandler(ship));
 
 function initiateDragging(event) {
   if (!draggingEnabled) return;
-  newGrabVisual(currentShip.length, event);
   event.preventDefault();
   event.stopPropagation();
   isValid = false;
-  currentShip.hideShip();
   if (currentShip.fromDrawer) currentShip.el.classList.add('picked');
   document.onmousemove = drag;
   document.onmouseup = endDrag;
 }
 
 function drag(event) {
+  currentShip.hideShip();
+  newGrabVisual(currentShip.length, event);
   const elementFromPoint = document.elementFromPoint(event.pageX, event.pageY);
   if (elementFromPoint) {
     if (elementFromPoint.classList.contains('cell') && elementFromPoint !== hoveredCell) {
@@ -137,7 +139,9 @@ function endDrag() {
   document.onmousedown = null;
   document.onmousemove = null;
   document.onmouseup = null;
+  if (!testIfMoved()) rotateShip();
   if (isValid) {
+    console.log('is valid move');
     if (!currentShip.fromDrawer) {
       players[activePlayer].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
       shipsPlaced--;
@@ -151,6 +155,14 @@ function endDrag() {
   newGrabVisual(false);
   currentShip = null;
   updateGameboards(players)
+}
+
+function testIfMoved() {
+  console.log(currentShip, validCellParams);
+  const shipStartCoords = [currentShip.startX, currentShip.startY];
+  if (validCellParams[0] === shipStartCoords[0] && validCellParams[1] === shipStartCoords[1]) moved = false;
+  else moved = true;
+  return moved;
 }
 
 function newGrabVisual(length, event) {
@@ -233,4 +245,8 @@ function shipDrawerVisibility(bool, player) {
   if (!bool) value = 'hidden';
   shipDrawerContentEl.classList.add(`player-${player}`);
   shipDrawerEl.style.visibility = value;
+}
+
+function rotateShip() {
+  console.log('Attempting rotation');
 }
