@@ -86,7 +86,7 @@ export function initiateShipPlacement(
 }
 
 export function endShipPlacement() {
-  draggingEnabled = false;
+  allowDragging(false);
   shipDrawerVisibility(false);
 }
 

@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
@@ -44,6 +44,7 @@ function promptForShipPlacement(activePlayer, second = false) {
   });
   if (second) {
     continueButtonControls.onClick(() => {
+      showShips(false);
       endShipPlacement();
       togglePlayerTurn();
       newRound();
@@ -52,6 +53,7 @@ function promptForShipPlacement(activePlayer, second = false) {
 }
 
 function newRound() {
+  updateGameboards(players);
   let clickedCell;
   continueButtonControls.message('Attack')
   continueButtonControls.disable();

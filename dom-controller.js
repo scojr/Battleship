@@ -8,6 +8,7 @@ const playerBoards = {
   2: document.querySelector('.gameboard.player-2'),
 }
 
+let shipsVisible = true;
 let cellEls = [];
 
 export function cellsOnClick(callback) {
@@ -110,7 +111,8 @@ export function updateGameboards(players) {
           }
         })
         if (cell) {
-          cellEl.classList.add('ship')
+          cellEl.classList.add('ship');
+          if (!shipsVisible) cellEl.classList.add('hidden');
           shipDragHandler(cellEl);
         }
         cellEls.push(cellEl);
@@ -155,4 +157,8 @@ export function getCellEl(player, x, y) {
   const row = board.querySelector(`.row-${y}`);
   const cell = row.querySelector(`.cell-${x}`);
   return cell;
+}
+
+export function showShips(bool) {
+  shipsVisible = bool;
 }
