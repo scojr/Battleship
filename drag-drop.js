@@ -163,10 +163,10 @@ function endDrag() {
 }
 
 function newGrabVisual(length, event) {
+  if (currentShip.rotation) visualEl.classList.remove('rotate');
   visualEl.innerHTML = '';
-  if (currentShip.rotation) visualEl.classList.remove('flex', 'column');
   if (!length) return;
-  if (currentShip.rotation) visualEl.classList.add('flex', 'column');
+  if (currentShip.rotation) visualEl.classList.add('rotate');
   for (let i = 0; i < length; i++) {
     const visualCellEl = document.createElement('div')
     visualCellEl.classList.add('cell');
