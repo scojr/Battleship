@@ -1,10 +1,12 @@
 import { getCellEl, updateGameboards } from "./dom-controller.js";
 
 const shipDrawerEl = document.querySelector('.ship-drawer.modal');
+const shipDrawerContentEl = shipDrawerEl.querySelector('.modal-content');
 const shipEls = shipDrawerEl.querySelectorAll('.player-ship');
 const visualEl = document.querySelector('.drag-drop-visual');
 
 let players;
+let activePlayer;
 let currentShip;
 let previousCells;
 let hoveredCell;
@@ -14,8 +16,14 @@ let draggingEnabled = false;
 let shipsPlaced = 0;
 let onShipsPlaced;
 
-export function allowDragging(bool) {
+function allowDragging(bool) {
   draggingEnabled = bool;
+}
+
+function reset() {
+  shipsPlaced = 0;
+  const drawerShips = shipDrawerContentEl.querySelectorAll('.player-ship');
+  drawerShips.forEach((ship) => ship.classList.remove('picked'));
 }
 
 class ShipDragging {
@@ -46,7 +54,7 @@ class ShipDragging {
     if (this.fromDrawer) return;
     const cells = [];
     for (let i = 0; i < this.length; i++) {
-      cells.push(getCellEl(this.startX + i, this.startY));
+      cells.push(getCellEl(activePlayer, this.startX + i, this.startY));
     }
     return cells;
   }
@@ -66,21 +74,32 @@ class ShipDragging {
   }
 }
 
-export function initiateShipPlacement(playersObject, callback) {
+export function initiateShipPlacement(
+  playersObject, player, callbackOnShipsPlaced
+) {
   players = playersObject;
-  onShipsPlaced = callback;
+  activePlayer = player;
+  onShipsPlaced = callbackOnShipsPlaced;
+  draggingEnabled = true;
+  reset();
+  shipDrawerVisibility(true, activePlayer);
+}
+
+export function endShipPlacement() {
+  draggingEnabled = false;
+  shipDrawerVisibility(false);
 }
 
 export function shipDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
-    currentShip = new ShipDragging(players['1'], ship);
+    currentShip = new ShipDragging(players[activePlayer], ship);
     initiateDragging(e, ship);
   });
 }
 
 function drawerDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
-    currentShip = new ShipDragging(players['1'], ship, true);
+    currentShip = new ShipDragging(players[activePlayer], ship, true);
     initiateDragging(e, ship);
   });
 }
@@ -120,12 +139,11 @@ function endDrag() {
   document.onmouseup = null;
   if (isValid) {
     if (!currentShip.fromDrawer) {
-      players['1'].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
+      players[activePlayer].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
       shipsPlaced--;
     }
-    players['1'].gameboard.placeShip(...validCellParams)
+    players[activePlayer].gameboard.placeShip(...validCellParams)
     shipsPlaced++;
-    console.log(onShipsPlaced)
     if (shipsPlaced >= 5) onShipsPlaced();
   } else if (currentShip.fromDrawer) {
     currentShip.el.classList.remove('picked');
@@ -201,9 +219,18 @@ function getCellsToTest() {
   const cellEls = [];
   const cellObjects = [];
   for (let i = firstCellToTest; i <= lastCellToTest; i++) {
-    cellEls.push(getCellEl(i, inactiveAxis))
-    cellObjects.push(players['1'].gameboard.getCell(i, inactiveAxis))
+    cellEls.push(getCellEl(activePlayer, i, inactiveAxis))
+    cellObjects.push(players[activePlayer].gameboard.getCell(i, inactiveAxis))
   }
   validCellParams = [firstCellToTest, inactiveAxis, shipLength];
   return cellEls;
+}
+
+function shipDrawerVisibility(bool, player) {
+  shipDrawerContentEl.classList.remove('player-1');
+  shipDrawerContentEl.classList.remove('player-2');
+  let value = 'visible'
+  if (!bool) value = 'hidden';
+  shipDrawerContentEl.classList.add(`player-${player}`);
+  shipDrawerEl.style.visibility = value;
 }

@@ -1,6 +1,6 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showMessage, shipDrawerVisibility, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
-import { initiateShipPlacement, allowDragging } from "./drag-drop.js";
+import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls } from "./dom-controller.js";
+import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -8,13 +8,11 @@ let inactivePlayer = '2';
 
 function togglePlayerTurn() {
   if (activePlayer === '1') {
-    console.log('test')
     activePlayer = '2'
     inactivePlayer = '1'
     return
   }
   if (activePlayer === '2') {
-    console.log('test2')
     activePlayer = '1'
     inactivePlayer = '2'
     return
@@ -28,30 +26,29 @@ function startGame(playerClicked) {
   players['1'] = new Player();
   players['2'] = new Player(true);
   updateGameboards(players);
-  initiateShipPlacement(players, () => {
-    continueButtonControls.enable();
-  });
-  if (playerClicked) promptForShip(players['1']);
-  allowDragging(true);
-}
-
-function promptForShip(player) {
-  showMessage('Player 1', 'Place your ships', 'OK')
-  promptForShips(players['1']);
-  updateGameboards(players);
-  continueButtonControls.disable();
-  continueButtonControls.show();
+  if (playerClicked) promptForShipPlacement(activePlayer);
   continueButtonControls.onClick(() => {
-    newRound();
-  });
+    togglePlayerTurn();
+    promptForShipPlacement(activePlayer, true);
+  })
 }
 
-function promptForShips(player) {
-  shipDrawerVisibility(true);
+function promptForShipPlacement(activePlayer, second = false) {
+  showMessage(`Player ${activePlayer}`, 'Place your ships', 'OK')
   newHeaderMessage(`Player ${activePlayer}, place your ships.`)
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();
   continueButtonControls.disable();
+  initiateShipPlacement(players, activePlayer, () => {
+    continueButtonControls.enable();
+  });
+  if (second) {
+    continueButtonControls.onClick(() => {
+      endShipPlacement();
+      togglePlayerTurn();
+      newRound();
+    })
+  }
 }
 
 function newRound() {

@@ -18,7 +18,6 @@ export function cellsOnClick(callback) {
 
 const newGameModalEl = document.querySelector('.new-game.modal')
 const messageModalEl = document.querySelector('.message.modal');
-const shipDrawerModal = document.querySelector('.ship-drawer.modal');
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
@@ -74,12 +73,6 @@ newGameButtonEls.playFriend.addEventListener('click', () => {
   closeNewGameModal();
 })
 
-export function shipDrawerVisibility(bool) {
-  let value = 'visible'
-  if (!bool) value = 'hidden';
-  shipDrawerModal.style.visibility = value;
-}
-
 function closeNewGameModal() {
   newGameModalEl.style.visibility = 'hidden';
 }
@@ -114,7 +107,6 @@ export function updateGameboards(players) {
           if (parseInt(miss.x) == cellIndex && parseInt(miss.y) == rowIndex) {
             if (miss.isHit) cellEl.classList.add('hit');
             else cellEl.classList.add('miss');
-            console.log(miss)
           }
         })
         if (cell) {
@@ -158,8 +150,9 @@ export function newHeaderMessage(string) {
   headerMessage.textContent = string;
 }
 
-export function getCellEl(x, y) {
-  const row = document.querySelector(`.row-${y}`);
+export function getCellEl(player, x, y) {
+  const board = document.querySelector(`.gameboard.player-${player}`)
+  const row = board.querySelector(`.row-${y}`);
   const cell = row.querySelector(`.cell-${x}`);
   return cell;
 }
