@@ -219,7 +219,6 @@ function getCellsToTest() {
   const shipLength = parseInt(currentShip.length);
   let firstCellToTest = Math.round((parseInt(activeAxis) - parseInt(shipLength) / 2));
   let lastCellToTest = Math.round((parseInt(activeAxis) + parseInt(shipLength) / 2) - 1);
-  console.log(hoveredCellX, hoveredCellY);
   if (firstCellToTest < 0) {
     const difference = 0 - firstCellToTest;
     firstCellToTest += difference;
@@ -239,7 +238,6 @@ function getCellsToTest() {
     cellEls.push(getCellEl(activePlayer, cell.x, cell.y))
   }
   validCellParams = [cellCoords[0][0], cellCoords[0][1], shipLength, currentShip.rotation];
-  console.log(cellCoords);
   return cellEls;
 }
 
@@ -254,6 +252,23 @@ function shipDrawerVisibility(bool, player) {
 
 function rotateShip() {
   players[activePlayer].gameboard.removeShip(currentShip.cellX, currentShip.cellY);
-  const placeAttempt = players[activePlayer].gameboard.placeShip(currentShip.startX, currentShip.startY, currentShip.length, !currentShip.rotation);
-  if (!placeAttempt) players[activePlayer].gameboard.placeShip(currentShip.startX, currentShip.startY, currentShip.length, currentShip.rotation);
+
+  const length = parseInt(currentShip.length);
+
+  const horizontalPlacement = {
+    x: parseInt(currentShip.startX) + (Math.floor(length / 2)),
+    y: parseInt(currentShip.startY) - (Math.floor(length / 2)),
+  };
+
+  const verticalPlacement = {
+    x: parseInt(currentShip.startX) - (Math.floor(length / 2)),
+    y: parseInt(currentShip.startY) + (Math.floor(length / 2)),
+  };
+
+  let axis = horizontalPlacement;
+  if (currentShip.rotation) axis = verticalPlacement;
+
+  const placeAttempt = players[activePlayer].gameboard.placeShip(axis.x, axis.y, length, !currentShip.rotation);
+
+  if (placeAttempt === false) players[activePlayer].gameboard.placeShip(currentShip.startX, currentShip.startY, currentShip.length, currentShip.rotation);
 }
