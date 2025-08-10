@@ -95,6 +95,7 @@ export function endShipPlacement() {
 
 export function shipDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
+    if (!draggingEnabled) return;
     currentShip = new ShipDragging(players[activePlayer], ship);
     initiateDragging(e, ship);
   });
@@ -102,6 +103,7 @@ export function shipDragHandler(ship) {
 
 function drawerDragHandler(ship) {
   ship.addEventListener('mousedown', (e) => {
+    if (!draggingEnabled) return;
     currentShip = new ShipDragging(players[activePlayer], ship, true);
     initiateDragging(e, ship);
     newGrabVisual(currentShip.length, e);
