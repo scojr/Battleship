@@ -1,7 +1,6 @@
 import { getCellEl, updateGameboards } from "./dom-controller.js";
 
-const shipDrawerEl = document.querySelector('.ship-drawer.modal');
-const shipDrawerContentEl = shipDrawerEl.querySelector('.modal-content');
+const shipDrawerEl = document.querySelector('.ship-drawer');
 const shipEls = shipDrawerEl.querySelectorAll('.player-ship');
 const visualEl = document.querySelector('.drag-drop-visual');
 
@@ -23,7 +22,7 @@ function allowDragging(bool) {
 
 function reset() {
   shipsPlaced = 0;
-  const drawerShips = shipDrawerContentEl.querySelectorAll('.player-ship');
+  const drawerShips = shipDrawerEl.querySelectorAll('.player-ship');
   drawerShips.forEach((ship) => ship.classList.remove('picked'));
 }
 
@@ -244,12 +243,12 @@ function getCellsToTest() {
 }
 
 function shipDrawerVisibility(bool, player) {
-  shipDrawerContentEl.classList.remove('player-1');
-  shipDrawerContentEl.classList.remove('player-2');
-  let value = 'visible'
-  if (!bool) value = 'hidden';
-  shipDrawerContentEl.classList.add(`player-${player}`);
-  shipDrawerEl.style.visibility = value;
+  shipDrawerEl.classList.remove('player-1');
+  shipDrawerEl.classList.remove('player-2');
+  let value = 'flex'
+  if (!bool) value = 'none';
+  shipDrawerEl.classList.add(`player-${player}`);
+  shipDrawerEl.style.display = value;
 }
 
 function rotateShip() {
