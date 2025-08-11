@@ -1,8 +1,6 @@
 import { startGame } from "./game-logic.js";
 import { shipDragHandler } from "./drag-drop.js";
 
-const gameboardsEl = document.querySelector('.gameboards');
-
 const playerBoards = {
   1: document.querySelector('.gameboard.player-1'),
   2: document.querySelector('.gameboard.player-2'),
@@ -54,6 +52,13 @@ function showContinueButton() {
   continueButtonEl.style.visibility = 'visible';
 }
 
+function movePlayerButton(playerNum) {
+  continueButtonEl.classList.remove('player-1', 'player-2');
+  if (!playerNum) return;
+  if (playerNum == 1) continueButtonEl.classList.add('player-1')
+  if (playerNum == 2) continueButtonEl.classList.add('player-2')
+}
+
 export const continueButtonControls = {
   onClick: continueButtonOnClick,
   message: continueButtonMessage,
@@ -61,6 +66,7 @@ export const continueButtonControls = {
   enable: enableContinueButton,
   hide: hideContinueButton,
   show: showContinueButton,
+  move: movePlayerButton,
 }
 
 const headerMessage = document.querySelector('.header-message');
@@ -126,14 +132,15 @@ export function updateGameboards(players) {
 export function hideGameboard(player) {
   playerBoards[1].classList.remove('hidden')
   playerBoards[2].classList.remove('hidden')
-  gameboardsEl.classList.remove('hidden')
 
   if (!player) return;
   let elToHide;
-  if (player === 1) elToHide = playerBoards[1];
-  if (player === 2) elToHide = playerBoards[2];
-  if (player === 3) elToHide = gameboardsEl;
-  elToHide.classList.add('hidden');
+  if (player === 1) playerBoards[1].classList.add('hidden');
+  if (player === 2) playerBoards[2].classList.add('hidden');
+  if (player === 3) {
+    playerBoards[1].classList.add('hidden');
+    playerBoards[2].classList.add('hidden');
+  }
 }
 
 export function showMessage(topMessage, bottomMessage, buttonMessage) {

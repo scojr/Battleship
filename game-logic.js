@@ -39,6 +39,7 @@ function promptForShipPlacement(activePlayer, second = false) {
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();
   continueButtonControls.disable();
+  continueButtonControls.move(activePlayer);
   initiateShipPlacement(players, activePlayer, () => {
     continueButtonControls.enable();
   });
@@ -53,6 +54,7 @@ function promptForShipPlacement(activePlayer, second = false) {
 }
 
 function newRound() {
+  continueButtonControls.move(inactivePlayer);
   updateGameboards(players);
   let clickedCell;
   continueButtonControls.message('Attack')
