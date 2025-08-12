@@ -16,17 +16,17 @@ export function cellsOnClick(callback) {
 }
 
 const newGameModalEl = document.querySelector('.new-game.modal')
-const messageModalEl = document.querySelector('.message.modal');
+const messageContainerEl = document.querySelector('.message-container');
 
 const newGameButtonEls = {
   'playCpu': document.querySelector('.play-cpu'),
   'playFriend': document.querySelector('.play-friend'),
 }
 
-const messageButtonEl = document.querySelector('.message-button');
+const messageButtonEl = document.querySelector('.message-close');
 
 messageButtonEl.addEventListener('click', (e) => {
-  messageModalEl.style.visibility = 'hidden';
+  messageContainerEl.style.display = 'none';
 })
 
 const continueButtonEl = document.querySelector('button.continue');
@@ -143,14 +143,19 @@ export function hideGameboard(player) {
   }
 }
 
-export function showMessage(topMessage, bottomMessage) {
-  const messageTopEl = messageModalEl.querySelector('.message-message-top');
-  const messageBottomEl = messageModalEl.querySelector('.message-message-bottom');
+export function showMessage(topMessage, bottomMessage, playerNum) {
+  messageContainerEl.classList.remove('player-1', 'player-2')
+  if (!topMessage) {
+    messageContainerEl.style.display = 'none';
+    return;
+  }
+  if (playerNum) messageContainerEl.classList.add(`player-${playerNum}`)
+  const messageTopEl = messageContainerEl.querySelector('.message-top');
+  const messageBottomEl = messageContainerEl.querySelector('.message-bottom');
   messageTopEl.textContent = topMessage;
   messageBottomEl.textContent = bottomMessage;
-  messageBottomEl.textContent = bottomMessage;
   hideGameboard(3);
-  messageModalEl.style.visibility = 'visible';
+  messageContainerEl.style.display = 'flex';
 }
 
 export function newHeaderMessage(string) {

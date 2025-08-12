@@ -264,7 +264,8 @@ button.continue {
   }
 }
 
-.modal {
+.modal,
+.message-container {
   position: fixed;
   z-index: 5;
   top: 0;
@@ -277,7 +278,8 @@ button.continue {
   pointer-events: none;
 }
 
-.modal-content {
+.modal-content,
+.message-content {
   margin-top: 20vh;
   color: white;
   background-color: black;
@@ -297,7 +299,8 @@ button.continue {
     font-size: 1.4rem;
   }
 
-  .modal-button-container {
+  .modal-button-container,
+  .message-close {
     justify-content: center;
     gap: 20px;
   }
@@ -329,58 +332,56 @@ button.continue {
   }
 }
 
-.message.modal {
-  visibility: hidden;
+.message-container {
+  display: none;
+  position: relative;
+  padding: 16px 60px;
+  height: max-content;
+  width: max-content;
 
-  .modal-content {
-    position: relative;
-    width: max-content;
-    height: min-content;
-    padding: 12px 0px 0px 12px;
-    max-width: 25vw;
+  .message-content {
+    padding: 6px 0px 2px 12px;
+    margin: 0;
+    width: clamp(250px, 30vw, 400px);
     box-shadow: none;
-    filter: drop-shadow(0px 0px 16px rgba(18, 199, 18, 0.7));
+    filter: drop-shadow(0px 0px 12px rgba(18, 199, 18, 0.6));
     text-align: left;
 
     h1 {
       font-size: 1.3rem;
+      height: min-content;
     }
 
     h2 {
       font-size: 1rem;
-      margin-bottom: 12px;
     }
 
-    .modal-button-container {
+    .message-close {
+      font-size: 1.4rem;
       position: absolute;
       top: 6px;
       right: 12px;
-      width: 1rem;
-      height: 1rem;
+      width: 1ch;
+      height: 1ch;
 
-      button {
-        position: relative;
-        width: inherit;
-        height: inherit;
-
-        span {
-          position: absolute;
-          top: -31%;
-          left: 7%;
-        }
+      span {
+        position: absolute;
+        top: -3.6px;
+        right: 3.5px;
+        font-size: 1.4rem;
       }
     }
   }
 }
 
-.message.modal {
+.message-content {
   .arrow {
     position: absolute;
     z-index: -1;
     top: 50%;
     left: 1px;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     filter: drop-shadow(-1px 1px rgba(18, 199, 18, 0.7)) drop-shadow(-1px -1px rgba(18, 199, 18, 0.7));
 
     &::after {
@@ -395,27 +396,36 @@ button.continue {
   }
 }
 
-/* .message.modal {
+.message-container {
+  transition: opacity 0.1s ease-in-out;
+  justify-self: center;
+  align-self: center;
+}
 
-  .arrow {
-    position: relative;
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    filter: drop-shadow(0px 1.5px 0px rgba(18, 199, 18, 0.9));
+.message-container.player-1 {
+  grid-area: player-2-ships;
+  justify-self: left;
+  margin-left: -3.5vw;
+}
 
-    &::after {
-      position: absolute;
-      top: -2px;
-      left: 50%;
-      transform: translateX(-50%) translateY(50%);
-      content: '';
-      width: 50%;
-      height: 50px;
-      background-color: rgb(0, 0, 0);
-      clip-path: polygon(0 0, 50% 100%, 100% 0);
+.message-container.player-2 {
+  grid-area: player-1-ships;
+  justify-self: right;
+  margin-right: -3.5vw;
+
+  .message-content {
+    .arrow {
+      left: 100%;
+      filter: drop-shadow(1px 1px rgba(18, 199, 18, 0.7)) drop-shadow(1px -1px rgba(18, 199, 18, 0.7));
+
+      &::after {
+        position: absolute;
+        transform: translateX(0%) translateY(-50%);
+        clip-path: polygon(100% 50%, 0 0, 0 100%);
+      }
     }
   }
-} */
+}
 
 .box {
   color: white;
