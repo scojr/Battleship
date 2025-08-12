@@ -232,7 +232,8 @@ button {
   margin: auto;
   color: white;
   background-color: rgb(0, 0, 0);
-  border: 2px solid rgba(18, 199, 18, 1);
+  border: 1px solid rgba(18, 199, 18, 1);
+  border-radius: 6px;
   box-shadow: 0px 0px 12px 3px rgba(18, 199, 18, 0.4);
   text-align: center;
   padding: 4px;
@@ -276,10 +277,6 @@ button.continue {
   pointer-events: none;
 }
 
-.message.modal {
-  visibility: hidden;
-}
-
 .modal-content {
   margin-top: 20vh;
   color: white;
@@ -290,16 +287,14 @@ button.continue {
   border-radius: 6px;
   height: min-content;
   pointer-events: all;
+  text-align: center;
 
   h1 {
-    text-align: center;
     font-size: 2rem;
   }
 
   h2 {
-    text-align: center;
     font-size: 1.4rem;
-    margin-bottom: 12px;
   }
 
   .modal-button-container {
@@ -334,6 +329,94 @@ button.continue {
   }
 }
 
+.message.modal {
+  visibility: hidden;
+
+  .modal-content {
+    position: relative;
+    width: max-content;
+    height: min-content;
+    padding: 12px 0px 0px 12px;
+    max-width: 25vw;
+    box-shadow: none;
+    filter: drop-shadow(0px 0px 16px rgba(18, 199, 18, 0.7));
+    text-align: left;
+
+    h1 {
+      font-size: 1.3rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .modal-button-container {
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      width: 1rem;
+      height: 1rem;
+
+      button {
+        position: relative;
+        width: inherit;
+        height: inherit;
+
+        span {
+          position: absolute;
+          top: -31%;
+          left: 7%;
+        }
+      }
+    }
+  }
+}
+
+.message.modal {
+  .arrow {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 1px;
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(-1px 1px rgba(18, 199, 18, 0.7)) drop-shadow(-1px -1px rgba(18, 199, 18, 0.7));
+
+    &::after {
+      position: absolute;
+      transform: translateX(-100%) translateY(-50%);
+      content: '';
+      width: inherit;
+      height: inherit;
+      background-color: rgb(0, 0, 0);
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    }
+  }
+}
+
+/* .message.modal {
+
+  .arrow {
+    position: relative;
+    width: calc(100% + 24px);
+    margin-left: -12px;
+    filter: drop-shadow(0px 1.5px 0px rgba(18, 199, 18, 0.9));
+
+    &::after {
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%) translateY(50%);
+      content: '';
+      width: 50%;
+      height: 50px;
+      background-color: rgb(0, 0, 0);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+    }
+  }
+} */
+
 .box {
   color: white;
   background-color: black;
@@ -348,11 +431,6 @@ button.inactive {
   opacity: 40%;
   cursor: default;
   pointer-events: none;
-}
-
-.message.modal button {
-  height: 60px;
-  padding: 0 12px;
 }
 
 .ship-drawer {

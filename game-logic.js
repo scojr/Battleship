@@ -34,7 +34,7 @@ function startGame(playerClicked) {
 }
 
 function promptForShipPlacement(activePlayer, second = false) {
-  showMessage(`Player ${activePlayer}`, 'Place your ships', 'OK')
+  showMessage(`Player ${activePlayer}`, 'Drag your ships onto the board. Click to rotate.')
   newHeaderMessage(`Player ${activePlayer}, place your ships.`)
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();

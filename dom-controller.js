@@ -143,14 +143,12 @@ export function hideGameboard(player) {
   }
 }
 
-export function showMessage(topMessage, bottomMessage, buttonMessage) {
+export function showMessage(topMessage, bottomMessage) {
   const messageTopEl = messageModalEl.querySelector('.message-message-top');
   const messageBottomEl = messageModalEl.querySelector('.message-message-bottom');
-  const buttonSpanEl = messageModalEl.querySelector('.confirm-text.message');
   messageTopEl.textContent = topMessage;
   messageBottomEl.textContent = bottomMessage;
   messageBottomEl.textContent = bottomMessage;
-  buttonMessage ? buttonSpanEl.textContent = buttonMessage : buttonSpanEl.textContent = 'Confirm';
   hideGameboard(3);
   messageModalEl.style.visibility = 'visible';
 }
