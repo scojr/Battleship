@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
