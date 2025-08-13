@@ -73,4 +73,14 @@ describe('Gameboard', () => {
     gameboard.removeShip(2, 1);
     expect(gameboard.getCell(1, 1)).toEqual(null);
   })
+
+  test('getTotalHealth returns the value of the length of every ship with hits subtracted', () => {
+    gameboard.placeShip(1, 1, 5);
+    gameboard.placeShip(1, 2, 5);
+    expect(gameboard.getTotalHealth()).toEqual(10);
+    gameboard.recieveAttack(1, 1);
+    gameboard.recieveAttack(1, 1);
+    gameboard.recieveAttack(1, 2);
+    expect(gameboard.getTotalHealth()).toEqual(7);
+  })
 })

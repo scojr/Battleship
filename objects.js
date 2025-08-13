@@ -81,6 +81,13 @@ export class Gameboard {
       console.log(row);
     }
   }
+  getTotalHealth() {
+    let total = 0;
+    this.ships.forEach((ship) => {
+      total += (ship.length - ship.hits);
+    })
+    return total;
+  }
 }
 
 function createGrid() {
