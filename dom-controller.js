@@ -177,14 +177,12 @@ const player1HealthBarEl = document.querySelector('.health-display.player-1');
 const player2HealthBarEl = document.querySelector('.health-display.player-2');
 
 export function adjustHealthBar(playerNum, healthValue) {
-  console.log(playerNum, healthValue);
   let playerToAdjust = null;
   if (playerNum === '1') playerToAdjust = player1HealthBarEl;
   if (playerNum === '2') playerToAdjust = player2HealthBarEl;
 
   const healthPointNodeList = playerToAdjust.querySelectorAll('.health-point');
   const healthPointEls = Array.from(healthPointNodeList);
-  console.log(healthPointEls)
   const positiveHealth = healthPointEls.splice(0, healthValue);
 
   positiveHealth.forEach((healthPointEl) => {

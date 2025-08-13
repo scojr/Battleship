@@ -57,30 +57,35 @@ function newRound() {
   showMessage(false);
   continueButtonControls.move(inactivePlayer);
   updateGameboards(players);
-  let clickedCell;
   continueButtonControls.message('Attack')
   continueButtonControls.disable();
   newHeaderMessage(`Player ${activePlayer}, attack your opponent!`)
   hideGameboard(parseInt(activePlayer));
-  cellsOnClick((e) => {
-    clickedCell = e.target;
-    continueButtonControls.onClick(() => {
-      const attack = players[inactivePlayer].gameboard.recieveAttack
-        (clickedCell.dataset.x, clickedCell.dataset.y);
-      let message = `You missed! Player ${inactivePlayer} is up next.`;
-      if (attack) message = `You hit! Player ${inactivePlayer} is up next.`;;
-      updateGameboards(players);
-      newHeaderMessage(message);
-      continueButtonControls.enable();
-      continueButtonControls.message('Continue')
-      togglePlayerTurn();
-      continueButtonControls.onClick(() => {
-        newRound()
-      });
-    });
-    highlightCell(e.target);
-    continueButtonControls.enable();
-  })
+  cellsOnClick((e) => { targetCell(e) })
+}
+
+function targetCell(e) {
+  let clickedCell;
+  clickedCell = e.target;
+  continueButtonControls.onClick(() => { confirmAttack(clickedCell) });
+  highlightCell(e.target);
+  continueButtonControls.enable();
+}
+
+function confirmAttack(clickedCell) {
+  const attack = players[inactivePlayer].gameboard.recieveAttack
+    (clickedCell.dataset.x, clickedCell.dataset.y);
+  let message = `You missed! Player ${inactivePlayer} is up next.`;
+  if (attack) message = `You hit! Player ${inactivePlayer} is up next.`;
+  testHealth(inactivePlayer);
+  updateGameboards(players);
+  newHeaderMessage(message);
+  continueButtonControls.enable();
+  continueButtonControls.message('Continue')
+  togglePlayerTurn();
+  continueButtonControls.onClick(() => {
+    newRound()
+  });
 }
 
 function printGrids() {
@@ -88,6 +93,17 @@ function printGrids() {
   players['1'].gameboard.printGrid();
   console.log('\n\nPlayer 2')
   players['2'].gameboard.printGrid();
+}
+
+function testHealth(playerNum) {
+  const playerObject = players[playerNum]
+  const playerHealth = playerObject.gameboard.getTotalHealth();
+  if (playerHealth > 17) endGame(playerNum);
+  adjustHealthBar(playerNum, playerHealth);
+}
+
+function endGame() {
+
 }
 
 export { startGame, newRound }
