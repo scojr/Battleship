@@ -98,12 +98,13 @@ function printGrids() {
 function testHealth(playerNum) {
   const playerObject = players[playerNum]
   const playerHealth = playerObject.gameboard.getTotalHealth();
-  if (playerHealth > 17) endGame(playerNum);
+  if (playerHealth === 0) endGame(playerNum);
   adjustHealthBar(playerNum, playerHealth);
 }
 
-function endGame() {
-
+function endGame(playerNum) {
+  showShips(true);
+  updateGameboards(players);
 }
 
 export { startGame, newRound }
