@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&display=swap');
+
 *,
 *::before,
 *::after {
@@ -8,11 +10,24 @@
 
 :root {
   --primary-color: orange;
+  --text-stroke-color: rgba(18, 199, 18, 0.4);
+  --text-stroke-green:
+    1px 1px var(--text-stroke-color),
+    -1px -1px var(--text-stroke-color),
+    -1px 1px var(--text-stroke-color),
+    1px -1px var(--text-stroke-color),
+    0px 0px 12px var(--text-stroke-color);
 }
+
+.jersey-25-regular {
+  font-family: "Jersey 25", sans-serif;
+  font-weight: 400;
+}
+
 
 html {
   font-size: 20px;
-  font-family: 'Nimbus Mono PS', 'Courier New', monospace;
+  font-family: 'Jersey 25', 'Nimbus Mono PS', 'Courier New', monospace;
   font-weight: normal;
 }
 
@@ -47,28 +62,59 @@ ol {
 }
 
 body {
+  background: linear-gradient(rgba(18, 199, 18, 0.2), black);
+  background-size: cover;
+  height: 100vh;
   line-height: 1.5;
   background-color: black;
   position: relative;
   user-select: none;
+  text-transform: uppercase;
 }
 
 header {
-  margin-bottom: 2vh;
+  margin-bottom: 1vh;
 
-  h1,
+  .title {
+
+    h1 {
+      opacity: 60%;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 1.8rem;
+      text-align: left;
+      padding-left: 0.6rem;
+      text-shadow: var(--text-stroke-green);
+      width: 100%;
+
+      &:hover {
+        opacity: 100%;
+      }
+    }
+  }
+
   h2 {
     position: relative;
     color: white;
+    font-size: 2.4rem;
+    white-space: nowrap;
+    margin: 0 auto;
+    width: min-content;
+    padding: 0 0.9rem;
     text-align: center;
-  }
 
-  h1 {
-    font-size: 3rem;
-  }
-
-  h2 {
-    font-size: 2rem;
+    &::before {
+      position: absolute;
+      z-index: -1;
+      content: '';
+      top: 0px;
+      left: 0px;
+      height: 100%;
+      width: 100%;
+      background-color: rgb(0, 0, 0);
+      box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
+      border: 1px solid rgba(18, 199, 18, 0.7);
+      border-radius: 6px;
+    }
   }
 }
 
@@ -190,11 +236,8 @@ header {
 
 .board-header {
   .name {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.45);
-    justify-self: stretch;
-    justify-self: center;
-    width: fit-content;
     margin-right: 2rem;
     grid-area: label;
     display: flex;
@@ -215,7 +258,6 @@ header {
     white-space: nowrap;
 
     span {
-      font-size: 0.8rem;
       margin-right: 4px;
       color: rgba(255, 255, 255, 0.45);
     }
@@ -223,7 +265,6 @@ header {
 
   .health-display {
     position: relative;
-    top: -2px;
     width: 100%;
     align-items: center;
 
@@ -293,7 +334,7 @@ button.continue {
   justify-self: center;
   margin-top: 24px;
   font-size: 2.6em;
-  padding: 10px 30px 0px;
+  padding: 0px 1rem 0px;
   visibility: hidden;
 
   &.player-1 {
@@ -383,7 +424,7 @@ button.continue {
   width: max-content;
 
   .message-content {
-    padding: 6px 0px 2px 12px;
+    padding: 4px 0px 4px 12px;
     margin: 0;
     width: clamp(250px, 30vw, 400px);
     box-shadow: none;
@@ -397,20 +438,21 @@ button.continue {
 
     h2 {
       font-size: 1rem;
+      text-transform: none;
+      margin-top: -8px;
     }
 
     .message-close {
       font-size: 1.4rem;
       position: absolute;
       top: 6px;
-      right: 12px;
+      right: 7px;
       width: 1ch;
       height: 1ch;
 
       span {
         position: absolute;
-        top: -3.6px;
-        right: 3.5px;
+        top: -10px;
         font-size: 1.4rem;
       }
     }
@@ -423,8 +465,8 @@ button.continue {
     z-index: -1;
     top: 50%;
     left: 1px;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     filter: drop-shadow(-1px 1px rgba(18, 199, 18, 0.7)) drop-shadow(-1px -1px rgba(18, 199, 18, 0.7));
 
     &::after {

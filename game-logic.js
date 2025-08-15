@@ -35,7 +35,7 @@ function startGame(playerClicked) {
 
 function promptForShipPlacement(activePlayer, second = false) {
   showMessage(`Player ${activePlayer}`, 'Drag your ships onto the board. Click to rotate.', activePlayer)
-  newHeaderMessage(`Player ${activePlayer}, place your ships.`)
+  newHeaderMessage(`Player ${activePlayer} - place your ships`)
   hideGameboard(parseInt(inactivePlayer));
   continueButtonControls.show();
   continueButtonControls.disable();
@@ -59,7 +59,7 @@ function newRound() {
   updateGameboards(players);
   continueButtonControls.message('Attack')
   continueButtonControls.disable();
-  newHeaderMessage(`Player ${activePlayer}, attack your opponent!`)
+  newHeaderMessage(`Player ${activePlayer} - attack your opponent`)
   hideGameboard(parseInt(activePlayer));
   cellsOnClick((e) => { targetCell(e) })
 }
@@ -75,8 +75,8 @@ function targetCell(e) {
 function confirmAttack(clickedCell) {
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (clickedCell.dataset.x, clickedCell.dataset.y);
-  let message = `You missed! Player ${inactivePlayer} is up next.`;
-  if (attack) message = `You hit! Player ${inactivePlayer} is up next.`;
+  let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next.`;
+  if (attack) message = `Player ${activePlayer} hit - Player ${inactivePlayer} is up next.`;
   testHealth(inactivePlayer);
   updateGameboards(players);
   newHeaderMessage(message);
