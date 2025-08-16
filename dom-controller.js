@@ -45,11 +45,11 @@ function enableContinueButton() {
 }
 
 function hideContinueButton() {
-  continueButtonEl.style.visibility = 'hidden';
+  continueButtonEl.style.display = 'none';
 }
 
 function showContinueButton() {
-  continueButtonEl.style.visibility = 'visible';
+  continueButtonEl.style.display = 'block';
 }
 
 function movePlayerButton(playerNum) {

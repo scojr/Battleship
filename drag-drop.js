@@ -153,7 +153,10 @@ function endDrag() {
     }
     players[activePlayer].gameboard.placeShip(...validCellParams);
     shipsPlaced++;
-    if (shipsPlaced >= 5) onShipsPlaced();
+    if (shipsPlaced >= 5) {
+      shipDrawerVisibility(false);
+      onShipsPlaced();
+    };
   } else if (currentShip.fromDrawer) {
     currentShip.el.classList.remove('picked');
   }

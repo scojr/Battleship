@@ -64,6 +64,7 @@ ol {
 body {
   background: linear-gradient(rgba(18, 199, 18, 0.2), black);
   background-size: cover;
+  background-repeat: no-repeat;
   height: 100vh;
   line-height: 1.5;
   background-color: black;
@@ -73,16 +74,23 @@ body {
 }
 
 header {
-  margin-bottom: 1vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 'left middle right';
+  height: 112px;
 
   .title {
+    justify-self: start;
+    grid-area: left;
+    margin-left: 12px;
+    width: min-content;
+    height: min-content;
+    position: relative;
 
     h1 {
-      opacity: 60%;
       color: rgba(0, 0, 0, 0.7);
-      font-size: 1.8rem;
+      font-size: 2rem;
       text-align: left;
-      padding-left: 0.6rem;
       text-shadow: var(--text-stroke-green);
       width: 100%;
 
@@ -92,28 +100,34 @@ header {
     }
   }
 
-  h2 {
-    position: relative;
-    color: white;
-    font-size: 2.4rem;
-    white-space: nowrap;
-    margin: 0 auto;
-    width: min-content;
-    padding: 0 0.9rem;
-    text-align: center;
+  .header-message-container {
+    grid-area: middle;
+    align-self: center;
 
-    &::before {
-      position: absolute;
-      z-index: -1;
-      content: '';
-      top: 0px;
-      left: 0px;
-      height: 100%;
-      width: 100%;
-      background-color: rgb(0, 0, 0);
-      box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
-      border: 1px solid rgba(18, 199, 18, 0.7);
-      border-radius: 6px;
+    h2 {
+      position: relative;
+      color: white;
+      font-size: 2.4rem;
+      white-space: nowrap;
+      margin: 0 auto;
+      margin-bottom: -0.5rem;
+      width: min-content;
+      padding: 0 0.9rem;
+      text-align: center;
+
+      &::before {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        background-color: rgb(0, 0, 0);
+        box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
+        border: 1px solid rgba(18, 199, 18, 0.7);
+        border-radius: 6px;
+      }
     }
   }
 }
@@ -336,10 +350,10 @@ button.continue {
   grid-area: button;
   align-self: center;
   justify-self: center;
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: 2.6em;
   padding: 0px 1rem 0px;
-  visibility: hidden;
+  display: none;
 
   &.player-1 {
     grid-area: button-1;
