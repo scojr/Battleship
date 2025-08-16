@@ -512,6 +512,16 @@ button.continue {
   }
 }
 
+button.play-again {
+  display: none;
+  margin-top: 2rem;
+  font-size: 3rem;
+  aspect-ratio: initial;
+  height: min-content;
+  padding: 2px 24px;
+  grid-area: button;
+}
+
 .box {
   color: white;
   background-color: black;

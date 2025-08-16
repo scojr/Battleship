@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar } from "./dom-controller.js";
+import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
@@ -77,7 +77,7 @@ function confirmAttack(clickedCell) {
     (clickedCell.dataset.x, clickedCell.dataset.y);
   let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next.`;
   if (attack) message = `Player ${activePlayer} hit - Player ${inactivePlayer} is up next.`;
-  testHealth(inactivePlayer);
+  if (testHealth(inactivePlayer)) return;
   updateGameboards(players);
   newHeaderMessage(message);
   continueButtonControls.enable();
@@ -98,13 +98,20 @@ function printGrids() {
 function testHealth(playerNum) {
   const playerObject = players[playerNum]
   const playerHealth = playerObject.gameboard.getTotalHealth();
-  if (playerHealth === 0) endGame(playerNum);
   adjustHealthBar(playerNum, playerHealth);
+  if (playerHealth === 0) {
+    endGame(activePlayer)
+    return true;
+  };
 }
 
-function endGame(playerNum) {
+function endGame(playerWinNum) {
   showShips(true);
+  hideGameboard(false);
+  continueButtonControls.hide();
   updateGameboards(players);
+  newHeaderMessage(`Player ${playerWinNum} wins`);
+  displayPlayAgain();
 }
 
 export { startGame, newRound }

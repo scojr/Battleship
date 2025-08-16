@@ -195,3 +195,14 @@ export function adjustHealthBar(playerNum, healthValue) {
     healthPointEl.classList.add('empty')
   })
 }
+
+
+const playAgainButtonEl = document.querySelector('button.play-again');
+
+playAgainButtonEl.addEventListener('click', (e) => {
+  window.location.reload();
+})
+
+export function displayPlayAgain() {
+  playAgainButtonEl.style.display = 'block';
+}
