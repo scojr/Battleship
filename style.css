@@ -367,7 +367,7 @@ button.continue {
   margin-top: 20vh;
   color: white;
   background-color: black;
-  padding: 12px 24px 24px;
+  padding: 6px 24px 24px;
   box-shadow: 0px 0px 30px 6px rgba(18, 199, 18, 0.4);
   border: 1px solid rgba(18, 199, 18, 0.7);
   border-radius: 6px;
@@ -377,6 +377,7 @@ button.continue {
 
   h1 {
     font-size: 2rem;
+    margin-bottom: 4px;
   }
 
   h2 {
@@ -403,14 +404,13 @@ button.continue {
 
     .icon {
       position: relative;
-      bottom: 8px;
+      bottom: 12px;
       height: 60px;
     }
 
     span {
       position: relative;
-      top: 6px;
-      margin-bottom: -24px;
+      margin-bottom: -30px;
       font-size: 2em;
     }
   }
