@@ -107,7 +107,6 @@ export class Player {
   constructor(isCPU = false) {
     this.isCPU = isCPU;
   }
-
   gameboard = new Gameboard;
 
   autoPlaceShips(num) {

@@ -66,7 +66,7 @@ export const continueButtonControls = {
 const headerMessage = document.querySelector('.header-message');
 
 newGameButtonEls.playCpu.addEventListener('click', () => {
-  startGame(true);
+  startGame(true, true);
   closeNewGameModal();
 })
 newGameButtonEls.playFriend.addEventListener('click', () => {

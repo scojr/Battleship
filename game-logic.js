@@ -22,9 +22,13 @@ function togglePlayerTurn() {
 startGame();
 hideGameboard(3);
 
-function startGame(playerClicked) {
+function startGame(playerClicked, clickedCPU) {
   players['1'] = new Player();
-  players['2'] = new Player(true);
+  if (clickedCPU) {
+    players['2'] = new Player(true);
+  } else {
+    players['2'] = new Player();
+  }
   updateGameboards(players);
   if (playerClicked) promptForShipPlacement(activePlayer);
   continueButtonControls.onClick(() => {
@@ -35,6 +39,13 @@ function startGame(playerClicked) {
 
 function promptForShipPlacement(activePlayer, second = false) {
   continueButtonControls.hide();
+  if (players[activePlayer].isCPU) {
+    placeShipsCPU()
+    endShipPlacement();
+    togglePlayerTurn();
+    newRound();
+    return;
+  }
   showMessage(`Player ${activePlayer}`, 'Drag your ships onto the board. Click to rotate.', activePlayer)
   newHeaderMessage(`Player ${activePlayer} - place your ships`)
   hideGameboard(parseInt(inactivePlayer));
@@ -47,7 +58,7 @@ function promptForShipPlacement(activePlayer, second = false) {
   });
   if (second) {
     continueButtonControls.onClick(() => {
-      showShips(false);
+      // showShips(false);
       endShipPlacement();
       togglePlayerTurn();
       newRound();
@@ -56,6 +67,7 @@ function promptForShipPlacement(activePlayer, second = false) {
 }
 
 function newRound() {
+  continueButtonControls.show();
   showMessage(false);
   continueButtonControls.move(inactivePlayer);
   updateGameboards(players);
@@ -64,6 +76,29 @@ function newRound() {
   newHeaderMessage(`Player ${activePlayer} - attack your opponent`)
   hideGameboard(parseInt(activePlayer));
   cellsOnClick((e) => { targetCell(e) })
+}
+
+function placeShipsCPU(playerNum) {
+  const cpuPlayer = players[playerNum];
+  console.log('explain')
+  let counter = 0;
+  while (counter > 5) {
+    const placeAttempt = cpuPlayer.gameboard.placeShip();
+    if (placeAttempt) counter++;
+  }
+}
+
+function randomAttackCPU() {
+
+}
+
+function getRandomCoords() {
+  const random11 = function () {
+    return Math.floor(Math.random() * 11);
+  }
+  let x = random11();
+  let y = random11();
+  return { x, y };
 }
 
 function targetCell(e) {
