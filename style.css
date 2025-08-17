@@ -402,8 +402,7 @@ button.continue {
     font-size: 1.4rem;
   }
 
-  .modal-button-container,
-  .message-close {
+  .modal-button-container {
     justify-content: center;
     gap: 20px;
   }
@@ -442,9 +441,9 @@ button.continue {
   width: max-content;
 
   .message-content {
-    padding: 4px 0px 4px 12px;
+    padding: 4px 12px;
     margin: 0;
-    width: clamp(250px, 30vw, 400px);
+    width: clamp(250px, min-content, 400px);
     box-shadow: none;
     filter: drop-shadow(0px 0px 12px rgba(18, 199, 18, 0.6));
     text-align: left;
@@ -458,21 +457,6 @@ button.continue {
       font-size: 1rem;
       text-transform: none;
       margin-top: -8px;
-    }
-
-    .message-close {
-      font-size: 1.4rem;
-      position: absolute;
-      top: 6px;
-      right: 7px;
-      width: 1ch;
-      height: 1ch;
-
-      span {
-        position: absolute;
-        top: -10px;
-        font-size: 1.4rem;
-      }
     }
   }
 }

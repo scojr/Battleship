@@ -23,12 +23,6 @@ const newGameButtonEls = {
   'playFriend': document.querySelector('.play-friend'),
 }
 
-const messageButtonEl = document.querySelector('.message-close');
-
-messageButtonEl.addEventListener('click', (e) => {
-  messageContainerEl.style.display = 'none';
-})
-
 const continueButtonEl = document.querySelector('button.continue');
 
 function continueButtonOnClick(callback) {
