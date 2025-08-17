@@ -77,14 +77,14 @@ function targetCell(e) {
 function confirmAttack(clickedCell) {
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (clickedCell.dataset.x, clickedCell.dataset.y);
-  let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next.`;
-  if (attack) message = `Player ${activePlayer} hit - Player ${inactivePlayer} is up next.`;
+  let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next`;
+  if (attack) message = `Player ${activePlayer} hit - attack your opponent`;
   if (testHealth(inactivePlayer)) return;
   updateGameboards(players);
   newHeaderMessage(message);
   continueButtonControls.enable();
   continueButtonControls.message('Continue')
-  togglePlayerTurn();
+  if (!attack) togglePlayerTurn();
   continueButtonControls.onClick(() => {
     newRound()
   });
