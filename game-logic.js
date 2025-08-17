@@ -40,7 +40,7 @@ function startGame(playerClicked, clickedCPU) {
 function promptForShipPlacement(activePlayer, second = false) {
   continueButtonControls.hide();
   if (players[activePlayer].isCPU) {
-    placeShipsCPU()
+    placeShipsCPU(activePlayer)
     endShipPlacement();
     togglePlayerTurn();
     newRound();
@@ -80,10 +80,13 @@ function newRound() {
 
 function placeShipsCPU(playerNum) {
   const cpuPlayer = players[playerNum];
-  console.log('explain')
+  const shipLengths = [
+    5, 4, 3, 3, 2
+  ];
   let counter = 0;
-  while (counter > 5) {
-    const placeAttempt = cpuPlayer.gameboard.placeShip();
+  while (counter < 5) {
+    const randomCoords = getRandomCoords();
+    const placeAttempt = cpuPlayer.gameboard.placeShip(randomCoords.x, randomCoords.y, shipLengths[counter], randomCoords.bool);
     if (placeAttempt) counter++;
   }
 }
@@ -93,12 +96,13 @@ function randomAttackCPU() {
 }
 
 function getRandomCoords() {
-  const random11 = function () {
-    return Math.floor(Math.random() * 11);
+  const randomNum = function (num) {
+    return Math.floor(Math.random() * num);
   }
-  let x = random11();
-  let y = random11();
-  return { x, y };
+  let x = randomNum(11);
+  let y = randomNum(11);
+  let bool = randomNum(2);
+  return { x, y, bool };
 }
 
 function targetCell(e) {
