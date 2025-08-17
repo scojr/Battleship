@@ -79,9 +79,10 @@ function closeNewGameModal() {
 }
 
 let highlightedCell;
-export function highlightCell(cellEl) {
-  if (highlightedCell) highlightedCell.classList.remove('targeted');
+export function highlightCell(cellEl, isCPU) {
+  if (highlightedCell) highlightedCell.classList.remove('targeted', 'cpu');
   cellEl.classList.add('targeted');
+  if (isCPU) cellEl.classList.add('CPU');
   highlightedCell = cellEl;
 }
 
@@ -92,10 +93,10 @@ export function updateGameboards(players) {
   const player1 = players['1'];
   const player2 = players['2'];
 
-  insertGrid(player1, playerBoards['1']);
-  insertGrid(player2, playerBoards['2']);
+  insertGrid(player1, playerBoards['1'], 1);
+  insertGrid(player2, playerBoards['2'], 2);
 
-  function insertGrid(player, gameboardEl) {
+  function insertGrid(player, gameboardEl, playerNum) {
     player.gameboard.grid.forEach((row, rowIndex) => {
       const rowEl = document.createElement('div');
       rowEl.classList.add('row', 'flex', `row-${rowIndex}`);
@@ -113,6 +114,7 @@ export function updateGameboards(players) {
         if (cell) {
           cellEl.classList.add('ship');
           if (!shipsVisible) cellEl.classList.add('hidden');
+          else if (shipsVisible && playerNum == 2) cellEl.classList.add('hidden');
           shipDragHandler(cellEl);
         }
         cellEls.push(cellEl);
@@ -163,8 +165,8 @@ export function getCellEl(player, x, y) {
   return cell;
 }
 
-export function showShips(bool) {
-  shipsVisible = bool;
+export function showShips(showShipsBool, showPlayerShipsBool) {
+  shipsVisible = showShipsBool;
 }
 
 const player1HealthBarEl = document.querySelector('.health-display.player-1');

@@ -181,6 +181,16 @@ header {
   }
 }
 
+.targeted.CPU {
+  animation: target-blink step-end 0.4s infinite;
+}
+
+@keyframes target-blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
 .gameboard.hidden {
   opacity: 40%;
   pointer-events: none;

@@ -1,10 +1,11 @@
 import { Player } from "./objects.js";
-import { highlightCell, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain } from "./dom-controller.js";
+import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
 let inactivePlayer = '2';
+let isCPU = false;
 
 function togglePlayerTurn() {
   if (activePlayer === '1') {
@@ -26,6 +27,7 @@ function startGame(playerClicked, clickedCPU) {
   players['1'] = new Player();
   if (clickedCPU) {
     players['2'] = new Player(true);
+    isCPU = true;
   } else {
     players['2'] = new Player();
   }
@@ -58,7 +60,11 @@ function promptForShipPlacement(activePlayer, second = false) {
   });
   if (second) {
     continueButtonControls.onClick(() => {
-      // showShips(false);
+      if (isCPU) {
+        showShips(true);
+      } else {
+        showShips(false);
+      }
       endShipPlacement();
       togglePlayerTurn();
       newRound();
@@ -67,14 +73,19 @@ function promptForShipPlacement(activePlayer, second = false) {
 }
 
 function newRound() {
-  continueButtonControls.show();
   showMessage(false);
-  continueButtonControls.move(inactivePlayer);
   updateGameboards(players);
+  if (isCPU) hideGameboard(false);
+  else hideGameboard(parseInt(activePlayer));
+  if (players[activePlayer].isCPU) {
+    randomAttackCPU(inactivePlayer)
+    return;
+  }
+  continueButtonControls.show();
+  continueButtonControls.move(inactivePlayer);
   continueButtonControls.message('Attack')
   continueButtonControls.disable();
   newHeaderMessage(`Player ${activePlayer} - attack your opponent`)
-  hideGameboard(parseInt(activePlayer));
   cellsOnClick((e) => { targetCell(e) })
 }
 
@@ -91,8 +102,12 @@ function placeShipsCPU(playerNum) {
   }
 }
 
-function randomAttackCPU() {
-
+function randomAttackCPU(playerNum) {
+  continueButtonControls.hide();
+  const randomCoords = getRandomCoords();
+  const randomCellEl = getCellEl(playerNum, randomCoords.x, randomCoords.y);
+  highlightCell(randomCellEl, true);
+  setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y, true), 1000);
 }
 
 function getRandomCoords() {
@@ -108,25 +123,30 @@ function getRandomCoords() {
 function targetCell(e) {
   let clickedCell;
   clickedCell = e.target;
-  continueButtonControls.onClick(() => { confirmAttack(clickedCell) });
+  continueButtonControls.onClick(() => { confirmAttack(clickedCell.dataset.x, clickedCell.dataset.y) });
   highlightCell(e.target);
   continueButtonControls.enable();
 }
 
-function confirmAttack(clickedCell) {
+function confirmAttack(cellX, cellY, isCPU) {
   const attack = players[inactivePlayer].gameboard.recieveAttack
-    (clickedCell.dataset.x, clickedCell.dataset.y);
+    (cellX, cellY);
   let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next`;
   if (attack) message = `Player ${activePlayer} hit - attack your opponent`;
   if (testHealth(inactivePlayer)) return;
   updateGameboards(players);
   newHeaderMessage(message);
-  continueButtonControls.enable();
-  continueButtonControls.message('Continue')
   if (!attack) togglePlayerTurn();
-  continueButtonControls.onClick(() => {
-    newRound()
-  });
+  if (isCPU) {
+    newRound();
+  } else {
+    continueButtonControls.enable();
+    continueButtonControls.message('Continue')
+    continueButtonControls.onClick(() => {
+      newRound()
+    });
+  }
+
 }
 
 function printGrids() {
