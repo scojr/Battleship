@@ -205,3 +205,10 @@ playAgainButtonEl.addEventListener('click', (e) => {
 export function displayPlayAgain() {
   playAgainButtonEl.style.display = 'block';
 }
+
+export function damageFeedback(playerNum) {
+  playerBoards[playerNum].classList.add('damaged');
+  setTimeout(() => {
+    playerBoards[playerNum].classList.remove('damaged');
+  }, 500);
+}

@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain } from "./dom-controller.js";
+import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain, damageFeedback } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 
 const players = { 1: null, 2: null }
@@ -140,13 +140,17 @@ function confirmAttack(cellX, cellY) {
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (cellX, cellY);
   let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next`;
-  if (attack) message = `Player ${activePlayer} hit - attack your opponent`;
+  if (attack) {
+    message = `Player ${activePlayer} hit - attack your opponent`;
+    damageFeedback(inactivePlayer);
+  }
   if (testHealth(inactivePlayer)) return;
   updateGameboards(players);
   newHeaderMessage(message);
   if (!attack) togglePlayerTurn();
   if (isCPU) {
-    newRound();
+    if (players[activePlayer].isCPU) setTimeout(() => newRound(), 200);
+    else newRound();
   } else {
     continueButtonControls.enable();
     continueButtonControls.message('Continue')
@@ -154,7 +158,6 @@ function confirmAttack(cellX, cellY) {
       newRound()
     });
   }
-
 }
 
 function printGrids() {
