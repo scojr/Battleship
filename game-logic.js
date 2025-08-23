@@ -28,8 +28,10 @@ function startGame(playerClicked, clickedCPU) {
   if (clickedCPU) {
     players['2'] = new Player(true);
     isCPU = true;
+    showShips(true);
   } else {
     players['2'] = new Player();
+    showShips(true);
   }
   updateGameboards(players);
   if (playerClicked) promptForShipPlacement(activePlayer);

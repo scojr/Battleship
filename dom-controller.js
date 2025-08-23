@@ -8,6 +8,7 @@ const playerBoards = {
 
 let shipsVisible = true;
 let cellEls = [];
+let isCPU = false;
 
 export function cellsOnClick(callback) {
   cellEls.forEach((cell) => {
@@ -68,10 +69,12 @@ const headerMessage = document.querySelector('.header-message');
 newGameButtonEls.playCpu.addEventListener('click', () => {
   startGame(true, true);
   closeNewGameModal();
+  isCPU = true;
 })
 newGameButtonEls.playFriend.addEventListener('click', () => {
   startGame(true);
   closeNewGameModal();
+  isCPU = false;
 })
 
 function closeNewGameModal() {
@@ -114,7 +117,7 @@ export function updateGameboards(players) {
         if (cell) {
           cellEl.classList.add('ship');
           if (!shipsVisible) cellEl.classList.add('hidden');
-          else if (shipsVisible && playerNum == 2) cellEl.classList.add('hidden');
+          else if (shipsVisible && isCPU && playerNum == 2) cellEl.classList.add('hidden');
           shipDragHandler(cellEl);
         }
         cellEls.push(cellEl);
