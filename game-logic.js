@@ -109,13 +109,12 @@ function randomAttackCPU(playerNum) {
   let randomCoords = getRandomCoords();
   const recievedAttacks = players['1'].gameboard.recievedAttacks;
   let hasRandomCoords = recievedAttacks.some(cell => cell.x === randomCoords.x && cell.y === randomCoords.y);
-  console.log(recievedAttacks);
   if (hasRandomCoords) {
     randomAttackCPU(playerNum)
   } else {
     const randomCellEl = getCellEl(playerNum, randomCoords.x, randomCoords.y);
     highlightCell(randomCellEl, true);
-    setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y, true), 1000);
+    setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y), 1000);
   }
 }
 
@@ -137,7 +136,7 @@ function targetCell(e) {
   continueButtonControls.enable();
 }
 
-function confirmAttack(cellX, cellY, isCPU) {
+function confirmAttack(cellX, cellY) {
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (cellX, cellY);
   let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next`;
