@@ -104,10 +104,17 @@ function placeShipsCPU(playerNum) {
 
 function randomAttackCPU(playerNum) {
   continueButtonControls.hide();
-  const randomCoords = getRandomCoords();
-  const randomCellEl = getCellEl(playerNum, randomCoords.x, randomCoords.y);
-  highlightCell(randomCellEl, true);
-  setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y, true), 1000);
+  let randomCoords = getRandomCoords();
+  const recievedAttacks = players['1'].gameboard.recievedAttacks;
+  let hasRandomCoords = recievedAttacks.some(cell => cell.x === randomCoords.x && cell.y === randomCoords.y);
+  console.log(recievedAttacks);
+  if (hasRandomCoords) {
+    randomAttackCPU(playerNum)
+  } else {
+    const randomCellEl = getCellEl(playerNum, randomCoords.x, randomCoords.y);
+    highlightCell(randomCellEl, true);
+    setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y, true), 1000);
+  }
 }
 
 function getRandomCoords() {
