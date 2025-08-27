@@ -1,6 +1,7 @@
 import { Player } from "./objects.js";
 import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain, damageFeedback } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
+import { initializeCpu, getCpuAttack } from "./cpu-strategy-logic.js";
 
 const players = { 1: null, 2: null }
 let activePlayer = '1';
@@ -29,6 +30,7 @@ function startGame(playerClicked, clickedCPU) {
     players['2'] = new Player(true);
     isCPU = true;
     showShips(true);
+    initializeCpu(players);
   } else {
     players['2'] = new Player();
     showShips(true);
@@ -64,6 +66,7 @@ function promptForShipPlacement(activePlayer, second = false) {
     continueButtonControls.onClick(() => {
       if (isCPU) {
         showShips(true);
+
       } else {
         showShips(false);
       }
@@ -80,7 +83,7 @@ function newRound() {
   if (isCPU) hideGameboard(false);
   else hideGameboard(parseInt(activePlayer));
   if (players[activePlayer].isCPU) {
-    randomAttackCPU(inactivePlayer)
+    cpuAttack();
     return;
   }
   continueButtonControls.show();
@@ -104,18 +107,11 @@ function placeShipsCPU(playerNum) {
   }
 }
 
-function randomAttackCPU(playerNum) {
-  continueButtonControls.hide();
-  let randomCoords = getRandomCoords();
-  const recievedAttacks = players['1'].gameboard.recievedAttacks;
-  let hasRandomCoords = recievedAttacks.some(cell => cell.x === randomCoords.x && cell.y === randomCoords.y);
-  if (hasRandomCoords) {
-    randomAttackCPU(playerNum)
-  } else {
-    const randomCellEl = getCellEl(playerNum, randomCoords.x, randomCoords.y);
-    highlightCell(randomCellEl, true);
-    setTimeout(() => confirmAttack(randomCoords.x, randomCoords.y), 1000);
-  }
+function cpuAttack() {
+  const cellToAttack = getCpuAttack();
+  const cellEl = getCellEl(1, cellToAttack.x, cellToAttack.y);
+  highlightCell(cellEl, true);
+  setTimeout(() => confirmAttack(cellToAttack.x, cellToAttack.y), 1000);
 }
 
 function getRandomCoords() {
