@@ -7,6 +7,8 @@ const players = { 1: null, 2: null }
 let activePlayer = '1';
 let inactivePlayer = '2';
 let isCPU = false;
+let onCpuHit;
+let onCpuMiss;
 
 function togglePlayerTurn() {
   if (activePlayer === '1') {
@@ -49,7 +51,7 @@ function promptForShipPlacement(activePlayer, second = false) {
     placeShipsCPU(activePlayer)
     endShipPlacement();
     togglePlayerTurn();
-    newRound();
+    newRound(true);
     return;
   }
   showMessage(`Player ${activePlayer}`, 'Drag your ships onto the board. Click to rotate.', activePlayer)
@@ -71,13 +73,14 @@ function promptForShipPlacement(activePlayer, second = false) {
         showShips(false);
       }
       endShipPlacement();
-      togglePlayerTurn();
       newRound();
     })
   }
 }
 
-function newRound() {
+function newRound(attack) {
+  continueButtonControls.disable();
+  if (!attack) togglePlayerTurn();
   showMessage(false);
   updateGameboards(players);
   if (isCPU) hideGameboard(false);
@@ -89,7 +92,6 @@ function newRound() {
   continueButtonControls.show();
   continueButtonControls.move(inactivePlayer);
   continueButtonControls.message('Attack')
-  continueButtonControls.disable();
   newHeaderMessage(`Player ${activePlayer} - attack your opponent`)
   cellsOnClick((e) => { targetCell(e) })
 }
@@ -108,7 +110,12 @@ function placeShipsCPU(playerNum) {
 }
 
 function cpuAttack() {
-  const cellToAttack = getCpuAttack();
+  continueButtonControls.disable();
+  continueButtonControls.hide();
+  const attack = getCpuAttack();
+  const cellToAttack = attack.coords;
+  onCpuMiss = attack.onMiss;
+  onCpuHit = attack.onHit;
   const cellEl = getCellEl(1, cellToAttack.x, cellToAttack.y);
   highlightCell(cellEl, true);
   setTimeout(() => confirmAttack(cellToAttack.x, cellToAttack.y), 1000);
@@ -133,6 +140,7 @@ function targetCell(e) {
 }
 
 function confirmAttack(cellX, cellY) {
+  continueButtonControls.disable();
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (cellX, cellY);
   let message = `Player ${activePlayer} missed - Player ${inactivePlayer} is up next`;
@@ -143,15 +151,23 @@ function confirmAttack(cellX, cellY) {
   if (testHealth(inactivePlayer)) return;
   updateGameboards(players);
   newHeaderMessage(message);
-  if (!attack) togglePlayerTurn();
   if (isCPU) {
-    if (players[activePlayer].isCPU) setTimeout(() => newRound(), 200);
-    else newRound();
+    if (players[activePlayer].isCPU) {
+      if (attack) {
+        onCpuHit();
+      } else {
+        onCpuMiss();
+      }
+      setTimeout(() => newRound(attack), 200);
+    } else {
+      newRound(attack);
+      return;
+    }
   } else {
     continueButtonControls.enable();
     continueButtonControls.message('Continue')
     continueButtonControls.onClick(() => {
-      newRound()
+      newRound(attack)
     });
   }
 }

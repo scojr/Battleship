@@ -6,30 +6,39 @@ export function initializeCpu(playersArray) {
 }
 
 const cpuStrategyStages = [
-  cpuSearching, cpuDiscovery, cpuFollowUp, cpuFinishOff,
+  cpuStageSearching, cpuStageDiscovery, cpuStageFollowUp, cpuStageFinishOff,
 ]
 
 export function getCpuAttack() {
   return cpuStrategyStages[stage]();
 }
 
-function cpuSearching() {
+function cpuStageSearching() {
   let randomCoords = getRandomCoords();
   while (testIfHitAlready(randomCoords)) {
     randomCoords = getRandomCoords()
   }
-  return randomCoords;
+
+  function onMiss() {
+    console.log('Cpu Missed!')
+  }
+
+  function onHit() {
+    console.log('Cpu Hit!')
+  }
+
+  return { coords: randomCoords, onMiss, onHit };
 }
 
-function cpuDiscovery() {
+function cpuStageDiscovery() {
 
 }
 
-function cpuFollowUp() {
+function cpuStageFollowUp() {
 
 }
 
-function cpuFinishOff() {
+function cpuStageFinishOff() {
 
 }
 
