@@ -2,19 +2,20 @@ let stage = 0;
 let players;
 const attackQueue = [];
 let attackIndex = 0;
+let discoveredCell;
 
 export function initializeCpu(playersArray) {
   players = playersArray;
 }
 
 const cpuStrategyStages = [
-  cpuStageSearching, cpuStageDiscovery, cpuStageFollowUp, cpuStageFinishOff,
+  cpuStageSearching, cpuStageDiscovery, cpuStageFollowUp, cpuStageFinish,
 ]
 
 export function getCpuAttack() {
-  console.log({ stage })
-  let cpuAttack = cpuStrategyStages[stage]();
-  while (!isValidTarget(cpuAttack.coords)) {
+  let cpuAttack;
+  cpuAttack = cpuStrategyStages[stage]();
+  while (!cpuAttack.coords || !isValidTarget(cpuAttack.coords)) {
     cpuAttack = cpuStrategyStages[stage]();
   }
   return cpuAttack
@@ -26,52 +27,75 @@ function cpuStageSearching() {
   function onMiss(cell) {
   }
   function onHit(cell) {
-    attackQueue.push(...getCoordSides(cell))
+    const coordSides = getCoordSides(cell)
+    attackQueue.push(...coordSides)
     stage = 1;
   }
   return { coords: randomCoords, onMiss, onHit };
 }
 
 function cpuStageDiscovery() {
-  console.log(attackQueue.slice())
-  const coords = attackQueue.shift();
+  let coords;
+  if (attackQueue.length) coords = attackQueue.shift();
+  else strategyReset();
   function onMiss(cell) {
-    console.log('miss', attackQueue)
     attackIndex++;
   }
   function onHit(cell) {
-    console.log('hit', attackQueue)
+    discoveredCell = cell;
+    const path = getPathRecursion(discoveredCell, attackIndex);
+    attackQueue.length = 0;
+    attackQueue.push(...path);
     stage = 2;
   }
   return { coords, onMiss, onHit };
 }
 
 function cpuStageFollowUp() {
-
+  let coords;
+  if (attackQueue.length) coords = attackQueue.shift();
+  else strategyReset();
   function onMiss(cell) {
-    console.log('stage-2 miss')
+    if (attackIndex < 2) {
+      const path = getPathRecursion(discoveredCell, attackIndex + 2);
+      attackQueue.length = 0;
+      attackQueue.push(...path)
+      stage = 3;
+    } else {
+      strategyReset();
+    }
   }
   function onHit(cell) {
-    console.log('stage-2 hit')
   }
-  return { coords: null, onMiss, onHit };
+  return { coords, onMiss, onHit };
 
 }
 
-function cpuStageFinishOff() {
-
+function cpuStageFinish() {
+  let coords;
+  if (attackQueue.length) coords = attackQueue.shift();
+  else strategyReset();
+  function onMiss(cell) {
+    stage = 0;
+    attackQueue.length = 0;
+    attackIndex = 0;
+    discoveredCell = null;
+  }
+  function onHit(cell) {
+  }
+  return { coords, onMiss, onHit };
 }
 
-function getPathRecursion(coords, dir, amount = 10, path = [getCoordSides(coords, dir),]) {
-  console.log(path)
+function getPathRecursion(
+  coords, dir, amount = 10,
+  path = [getCoordSides(coords, dir)]
+) {
   const nextCoord = getCoordSides(path[path.length - 1], dir);
+  if (testIfHitAlready(nextCoord)) return path;
+  path.push(nextCoord);
   if (path.length === amount) return path;
-  return getPathRecursion(nextCoord, dir, path, amount);
+  return getPathRecursion(getCoordSides(nextCoord, dir), dir, amount, path);
 }
-
-const myCoord = { x: 1, y: 1 };
-const coordSide = getCoordSides(myCoord, 1)
-console.log(coordSide);
 
 function getCoordSides(coords, dir) {
   const sides = [
@@ -80,7 +104,7 @@ function getCoordSides(coords, dir) {
     { x: coords.x, y: coords.y + 1 },
     { x: coords.x - 1, y: coords.y }
   ]
-  if (dir) return sides[dir];
+  if (dir === 0 || dir) return sides[dir];
   return sides;
 }
 
@@ -99,13 +123,12 @@ function testIfHitAlready(coordsObject) {
 }
 
 function constrainCoords(coordsObject) {
-  console.log(coordsObject);
   let coordsToConstrain = coordsObject;
+  if (!coordsToConstrain) return false;
   if (coordsToConstrain.x > 10) coordsToConstrain.x = 10;
   if (coordsToConstrain.y > 10) coordsToConstrain.y = 10;
   if (coordsToConstrain.x < 0) coordsToConstrain.x = 0;
   if (coordsToConstrain.y < 0) coordsToConstrain.y = 0;
-  console.log(coordsToConstrain);
   return coordsToConstrain;
 }
 
@@ -113,5 +136,13 @@ function isValidTarget(coordsObject) {
   const rawCoords = coordsObject;
   const constrainedCoords = constrainCoords(rawCoords);
   if (testIfHitAlready(constrainedCoords)) return false;
+  if (constrainedCoords === null) return false;
   else return constrainedCoords;
+}
+
+function strategyReset() {
+  stage = 0;
+  attackQueue.length = 0;
+  attackIndex = 0;
+  discoveredCell = null;
 }
