@@ -140,6 +140,7 @@ function targetCell(e) {
 }
 
 function confirmAttack(cellX, cellY) {
+  const cellObject = { x: cellX, y: cellY, player: activePlayer, }
   continueButtonControls.disable();
   const attack = players[inactivePlayer].gameboard.recieveAttack
     (cellX, cellY);
@@ -154,9 +155,9 @@ function confirmAttack(cellX, cellY) {
   if (isCPU) {
     if (players[activePlayer].isCPU) {
       if (attack) {
-        onCpuHit();
+        onCpuHit(cellObject);
       } else {
-        onCpuMiss();
+        onCpuMiss(cellObject);
       }
       setTimeout(() => newRound(attack), 200);
     } else {
