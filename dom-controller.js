@@ -118,6 +118,10 @@ export function updateGameboards(players) {
           cellEl.classList.add('ship');
           if (!shipsVisible) cellEl.classList.add('hidden');
           else if (shipsVisible && isCPU && playerNum == 2) cellEl.classList.add('hidden');
+          if (cell.hits == cell.length) {
+            cellEl.classList.add('destroyed');
+            cellEl.classList.remove('hidden')
+          };
           shipDragHandler(cellEl);
         }
         cellEls.push(cellEl);
