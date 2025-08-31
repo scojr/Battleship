@@ -728,3 +728,23 @@ button.inactive {
 .cell.hovered.invalid {
   background-color: rgba(255, 0, 43, 0.4);
 }
+
+span.attribution {
+  text-transform: none;
+  position: absolute;
+  bottom: 0px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.6rem;
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: white;
+    text-decoration: none;
+    opacity: 40%;
+
+    &:hover {
+      opacity: 100%;
+    }
+  }
+}
