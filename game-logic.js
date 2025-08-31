@@ -161,11 +161,16 @@ function confirmAttack(cellX, cellY) {
       return;
     }
   } else {
-    continueButtonControls.enable();
-    continueButtonControls.message('Continue')
-    continueButtonControls.onClick(() => {
-      newRound(attack)
-    });
+    if (attack) {
+      newRound(attack);
+    }
+    else {
+      continueButtonControls.enable();
+      continueButtonControls.message('Continue')
+      continueButtonControls.onClick(() => {
+        newRound(attack)
+      });
+    }
   }
 }
 
