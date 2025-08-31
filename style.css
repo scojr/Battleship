@@ -375,6 +375,10 @@ header {
   }
 }
 
+.gameboard.disable {
+  pointer-events: none;
+}
+
 .row:nth-child(even) {
   background-color: rgb(4, 24, 3);
 }

@@ -1,5 +1,5 @@
 import { Player } from "./objects.js";
-import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain, damageFeedback } from "./dom-controller.js";
+import { highlightCell, getCellEl, cellsOnClick, updateGameboards, showMessage, hideGameboard, newHeaderMessage, continueButtonControls, showShips, adjustHealthBar, displayPlayAgain, damageFeedback, disableBoardInteraction } from "./dom-controller.js";
 import { initiateShipPlacement, endShipPlacement } from "./drag-drop.js";
 import { initializeCpu, getCpuAttack } from "./cpu-strategy-logic.js";
 
@@ -42,6 +42,7 @@ function startGame(playerClicked, clickedCPU) {
   continueButtonControls.onClick(() => {
     togglePlayerTurn();
     promptForShipPlacement(activePlayer, true);
+    if (isCPU) disableBoardInteraction(1, true)
   })
 }
 
@@ -66,12 +67,7 @@ function promptForShipPlacement(activePlayer, second = false) {
   });
   if (second) {
     continueButtonControls.onClick(() => {
-      if (isCPU) {
-        showShips(true);
-
-      } else {
-        showShips(false);
-      }
+      showShips(false);
       endShipPlacement();
       newRound();
     })
@@ -194,6 +190,8 @@ function testHealth(playerNum) {
 function endGame(playerWinNum) {
   showShips(true);
   hideGameboard(false);
+  disableBoardInteraction(1, true)
+  disableBoardInteraction(2, true)
   continueButtonControls.hide();
   updateGameboards(players);
   newHeaderMessage(`Player ${playerWinNum} wins`);
