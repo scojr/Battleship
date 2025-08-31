@@ -106,7 +106,6 @@ function placeShipsCPU(playerNum) {
 }
 
 function cpuAttack() {
-  console.log('cpuAttack')
   continueButtonControls.disable();
   continueButtonControls.hide();
   const attack = getCpuAttack();

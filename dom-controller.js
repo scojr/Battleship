@@ -148,7 +148,6 @@ export function hideGameboard(player) {
 
 export function disableBoardInteraction(player, bool) {
   const board = playerBoards[player];
-  console.log(board);
   if (bool) board.classList.add('disable');
   else board.classList.remove('disable');
 }

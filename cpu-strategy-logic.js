@@ -30,6 +30,7 @@ function cpuStageSearching() {
     const coordSides = getCoordSides(cell)
     attackQueue.push(...coordSides)
     stage = 1;
+    onHitGlobal(cell);
   }
   return { coords: randomCoords, onMiss, onHit };
 }
@@ -47,6 +48,7 @@ function cpuStageDiscovery() {
     attackQueue.length = 0;
     attackQueue.push(...path);
     stage = 2;
+    onHitGlobal(cell);
   }
   return { coords, onMiss, onHit };
 }
@@ -61,11 +63,13 @@ function cpuStageFollowUp() {
       attackQueue.length = 0;
       attackQueue.push(...path)
       stage = 3;
+
     } else {
       strategyReset();
     }
   }
   function onHit(cell) {
+    onHitGlobal(cell);
   }
   return { coords, onMiss, onHit };
 
@@ -82,8 +86,15 @@ function cpuStageFinish() {
     discoveredCell = null;
   }
   function onHit(cell) {
+    onHitGlobal(cell);
   }
   return { coords, onMiss, onHit };
+}
+
+function onHitGlobal(cell) {
+  if (isShipDestroyed(cell)) {
+    strategyReset();
+  }
 }
 
 function getPathRecursion(
@@ -145,4 +156,14 @@ function strategyReset() {
   attackQueue.length = 0;
   attackIndex = 0;
   discoveredCell = null;
+}
+
+function isShipDestroyed(coordsObject) {
+  const player1 = players['1'];
+  const x = coordsObject.x;
+  const y = coordsObject.y;
+  const cell = player1.gameboard.getCell(x, y);
+  if (!cell) return false;
+  if (cell.hits === cell.length) return true;
+  else return false;
 }
